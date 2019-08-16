@@ -5,15 +5,15 @@ Use the entries below as an example.
 
 ## Week 4
 
-Everyone: create application skeleton - meeting 14:00 17 Aug
+Meeting on friday to dicuss, 1pm
 
 ## Week 5
 
-Zhang San: Task 3 isPiecePlacementWellFormed - 21 Aug
+Apoorva: task 2
+Nicole: task 3
+Boxuan: task 4
 
-Jane Bloggs: Task 4 getNeighbours - 23 Aug
-
-Erika Mustermann: Task 6 getViablePiecePlacements - 24 Aug (depends on Task 3)
+All three work on task 5 and then come together, netx friday. 
 
 ## Week 6
 
