@@ -50,9 +50,9 @@ assets:
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:
-    uid:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Apoorva Sajja
+    uid: u6420804
+  - name: Nicole Wang
+    uid: u6947648
+  - name: Boxuan Yang
+    uid: u6778195
