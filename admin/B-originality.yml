@@ -9,7 +9,7 @@
 # https://cs.anu.edu.au/courses/comp1110/help/faq/09-originality/
 #
 
-declaration: >-
+#declaration: >-
   We declare that everything we have submitted for Stage B of this assignment
   and all stages before it is entirely our own work, with the following
 #  exceptions:
@@ -21,7 +21,7 @@ declaration: >-
 # (or remove it altogether if you haven't collaborated with anyone)
 #collaboration:
 #  - name:
- #   comment: >-
+#   comment: >-
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
