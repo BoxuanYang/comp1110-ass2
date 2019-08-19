@@ -9,10 +9,10 @@
 # https://cs.anu.edu.au/courses/comp1110/help/faq/09-originality/
 #
 
-#declaration: >-
+declaration: >-
   We declare that everything we have submitted for Stage B of this assignment
   and all stages before it is entirely our own work, with the following
-#  exceptions:
+# exceptions:
 
 # Use this to list names of people who you collaborated with, and a
 # comment about what you collaborated on.
@@ -30,10 +30,10 @@
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
-#code:
+# code:
  # - comment:
  #   url:
-  #  licence:
+ #  licence:
 
 # Use this to list any assets (artwork, sound, etc) that you used.
 # Provide a comment explaining your use of that asset and the URL
@@ -43,8 +43,8 @@
 # (or remove it altogether if you haven't used any external assets)
 #assets:
  # - comment:
-  #  url:
-   # licence:
+ #  url:
+ # licence:
 
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
