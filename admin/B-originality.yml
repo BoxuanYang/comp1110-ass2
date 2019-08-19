@@ -19,7 +19,7 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-#collaboration:
+# collaboration:
 #  - name:
 #   comment: >-
 
