@@ -38,6 +38,9 @@ public class FocusGame {
      */
     public static boolean isPlacementStringWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
+
+
+
         return false;
     }
 
