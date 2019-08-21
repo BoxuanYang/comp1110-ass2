@@ -27,9 +27,9 @@ public class FocusGame {
         boolean a = false;
         if (piecePlacement.length() == 4){
             if (piecePlacement.charAt(0) <= 'j' && piecePlacement.charAt(0) >= 'a' ){
-                if (piecePlacement.charAt(1) <= '8'){
-                    if (piecePlacement.charAt(2) <= '4'){
-                        if (piecePlacement.charAt(3) <= '3'){
+                if (piecePlacement.charAt(1) <= '8' && piecePlacement.charAt(1) >= '0'){
+                    if (piecePlacement.charAt(2) <= '4' && piecePlacement.charAt(2) >= '0'){
+                        if (piecePlacement.charAt(3) <= '3' && piecePlacement.charAt(3) >= '0'){
                             a = true;
                         }
                     }
