@@ -44,6 +44,7 @@ public class Board extends Application {
 
 
     // FIXME Task 10: Implement hints
+
     // TASK 10: get possible piece placements for the next move
     public String getPossiblePlacements() {
         return "";
@@ -55,6 +56,32 @@ public class Board extends Application {
     }
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
+
+    // TASK 11: set difficulty of challenges
+    public String setDifficulty() {
+        return "";
+    }
+
+    // TASK 11: get a start placement randomly
+    public String getStartPlacement(String difficulty) {
+       return "";
+    }
+
+    //TASK 11: Finds solutions
+    public String findSolutions(String placement) {
+        return"";
+    }
+
+    //TASK 11: Checks if startPlacement has one solution
+    public boolean hasOneSolution() {
+        return false;
+    }
+
+    //TASK 11: Finds a start placement with one solution
+    public String getChallenge() {
+        return "";
+    }
+
 
 
     @Override
