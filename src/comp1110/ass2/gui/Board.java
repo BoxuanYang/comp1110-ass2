@@ -44,10 +44,18 @@ public class Board extends Application {
 
 
     // FIXME Task 10: Implement hints
+    // TASK 10: get possible piece placements for the next move
+    public String getPossiblePlacements() {
+        return "";
+    }
 
-
+    // TASK 10:
+    public String implementHints() {
+        return "";
+    }
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
+
 
     @Override
     public void start(Stage primaryStage) {
