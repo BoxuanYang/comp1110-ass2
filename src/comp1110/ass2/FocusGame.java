@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -49,26 +50,57 @@ public class FocusGame {
      * @return True if the placement is well-formed
      */
     public static boolean isPlacementStringWellFormed(String placement) {
+
         // FIXME Task 3: determine whether a placement is well-formed
 
+        int length = placement.length();
+        int N = length / 4;
 
+        // placement string has exactly N four-character piece placements
+        if (length%4 != 0 || N < 1) {
+            return false;
+        }
 
-        return false;
+        // each  piece placement is well-formed
+        for(int i=0; i<N; i++) {
+            int a = 4*i;
+            String piece = placement.substring(a,a+4);
+            if (!isPiecePlacementWellFormed(piece)) {
+                return false;
+            }
+        }
+
+        // create a sorted char array of all shape characters
+        char[] shapes = new char[N];
+        for(int i=0; i<N; i++) {
+            shapes[i] = placement.charAt(i*4);
+        }
+        Arrays.sort(shapes);
+
+        // check if no shape appears more than once in the placement
+        for (int i=0; i<N-1;i++) {
+            if(shapes[i] == shapes[i+1]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether a placement string is valid.
-     *
-     * To be valid, the placement string must be:
-     * - well-formed, and
-     * - each piece placement must be a valid placement according to the
-     *   rules of the game:
-     *   - pieces must be entirely on the board
-     *   - pieces must not overlap each other
-     *
-     * @param placement A placement string
-     * @return True if the placement sequence is valid
-     */
+
+        /**
+         * Determine whether a placement string is valid.
+         *
+         * To be valid, the placement string must be:
+         * - well-formed, and
+         * - each piece placement must be a valid placement according to the
+         *   rules of the game:
+         *   - pieces must be entirely on the board
+         *   - pieces must not overlap each other
+         *
+         * @param placement A placement string
+         * @return True if the placement sequence is valid
+         */
     public static boolean isPlacementStringValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
         return false;
@@ -124,4 +156,5 @@ public class FocusGame {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
         return null;
     }
+
 }
