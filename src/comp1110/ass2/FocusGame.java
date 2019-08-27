@@ -146,6 +146,11 @@ public class FocusGame {
      */
     static Set<String> getViablePiecePlacements(String placement, String challenge, int col, int row) {
         // FIXME Task 6: determine the set of all viable piece placements given existing placements and a challenge
+        // Placement string is valid
+        if (!isPlacementStringValid(placement)) {
+            return null;
+        }
+
         return null;
     }
 
