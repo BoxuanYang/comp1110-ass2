@@ -3,13 +3,30 @@ package comp1110.ass2;
 import java.util.Arrays;
 import java.util.Set;
 
+import static comp1110.ass2.State.*;
+
 /**
  * This class provides the text interface for the IQ Focus Game
  * <p>
  * The game is based directly on Smart Games' IQ-Focus game
  * (https://www.smartgames.eu/uk/one-player-games/iq-focus)
  */
+
+
 public class FocusGame {
+
+
+    private State[][] boardstates = {
+        {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
+            {null, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, null},
+
+    };
+
+
+
 
     /**
      * Determine whether a piece placement is well-formed according to the
@@ -115,8 +132,16 @@ public class FocusGame {
      * @return True if the placement sequence is valid
      */
     public static boolean isPlacementStringValid(String placement) {
+        // is placement string well wormed
+        if (!isPlacementStringWellFormed(placement)) {
+            return false;
+        }
+
+        // is each piece entirely on the board
+
+
         // FIXME Task 5: determine whether a placement string is valid
-        return false;
+        return true;
     }
 
     /**
@@ -150,6 +175,13 @@ public class FocusGame {
         if (!isPlacementStringValid(placement)) {
             return null;
         }
+
+        // array of challenge colours
+        char[] colours = challenge.toCharArray();
+
+        // check if colour matches challenge square
+
+
 
         return null;
     }

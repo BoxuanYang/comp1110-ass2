@@ -9,10 +9,11 @@
 # https://cs.anu.edu.au/courses/comp1110/help/faq/09-originality/
 #
 
-#declaration: >-
-#  We declare that everything we have submitted for Stage C of this assignment
- # and all stages before it is entirely our own work, with the following
- # exceptions:
+declaration: >-
+ We declare that everything we have submitted for Stage C of this assignment
+ and all stages before it is entirely our own work, with the following
+ 
+# exceptions:
 
 # Use this to list names of people who you collaborated with, and a
 # comment about what you collaborated on.
