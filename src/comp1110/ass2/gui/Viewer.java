@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+
 /**
  * A very simple viewer for piece placements in the IQ-Focus game.
  * <p>
@@ -37,7 +38,20 @@ public class Viewer extends Application {
      * @param placement A valid placement string
      */
     void makePlacement(String placement) {
+        int n = placement.length() / 4;
+        char[] pieces = new char[n];
+        char[] orien  =new char[n];
+        int[]  xPos = new int[n];
+        int[]  yPos = new int[n];
+        for(int i = 0; i < n; i++){
+            pieces[i] = placement.charAt(4*i);
+            orien[i] = placement.charAt(3 + 4*i);
+            xPos[i] = placement.charAt(1 + 4*i) - '0';
+            yPos[i] = placement.charAt(2+4*i) - '0';
+
+        }
         // FIXME Task 4: implement the simple placement viewer
+
     }
 
     /**
