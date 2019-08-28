@@ -138,6 +138,13 @@ public class FocusGame {
         }
 
         // is each piece entirely on the board
+        int length = placement.length();
+        int N = length / 4;
+
+        for (int i = 0; i < N; i++) {
+
+            }
+
 
 
         // FIXME Task 5: determine whether a placement string is valid

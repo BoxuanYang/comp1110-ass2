@@ -5,7 +5,7 @@ public class Piece {
     private Location location;
     private Orientation orientation;
 
-    public Piece (String placement){
+    Piece (String placement){
         this.location = location;
         this.orientation = orientation;
     }
