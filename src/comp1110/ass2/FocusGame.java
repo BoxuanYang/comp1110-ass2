@@ -27,7 +27,6 @@ public class FocusGame {
 
 
 
-
     /**
      * Determine whether a piece placement is well-formed according to the
      * following criteria:
@@ -41,7 +40,6 @@ public class FocusGame {
      * @return True if the piece placement is well-formed
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
-        // FIXME Task 2: determine whether a piece placement is well-formed
 
         // piece placement consists of exactly four characters
         if (piecePlacement.length() != 4) {
@@ -64,10 +62,7 @@ public class FocusGame {
         }
 
         // the fourth character is in the range 0 .. 3 (orientation)
-        if (!(piecePlacement.charAt(3) <= '3' && piecePlacement.charAt(3) >= '0')) {
-            return false;
-        }
-        return true;
+        return piecePlacement.charAt(3) <= '3' && piecePlacement.charAt(3) >= '0';
     }
 
     /**
@@ -80,8 +75,6 @@ public class FocusGame {
      * @return True if the placement is well-formed
      */
     public static boolean isPlacementStringWellFormed(String placement) {
-
-        // FIXME Task 3: determine whether a placement is well-formed
 
         int length = placement.length();
         int N = length / 4;
@@ -113,7 +106,6 @@ public class FocusGame {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -144,7 +136,6 @@ public class FocusGame {
         for (int i = 0; i < N; i++) {
 
             }
-
 
 
         // FIXME Task 5: determine whether a placement string is valid
