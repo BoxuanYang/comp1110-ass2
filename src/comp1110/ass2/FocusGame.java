@@ -125,7 +125,7 @@ public class FocusGame {
      * @return True if the placement sequence is valid
      */
     public static boolean isPlacementStringValid(String placement) {
-        // is placement string well wormed
+        // is placement string well formed
         if (!isPlacementStringWellFormed(placement)) {
             return false;
         }
@@ -135,31 +135,26 @@ public class FocusGame {
 
         // checks each piece in the placement
         int length = placement.length();
-        int N = length / 4;
 
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i+4 < length; i = i + 4) {
             char s = placement.charAt(i);
             // should get rotated version but this is currently un-rotated
             State[][] state = getShape(s);
 
             int row = placement.charAt(i+1);
-            int col = placement.charAt(i+2);
+            int col = (int) placement.charAt(i+2);
 
             int rowNo = state[0].length;
             int colNo = state.length;
 
             for (int x = 0; x < rowNo; x++) {
                 for (int y = 0; y < colNo; y++) {
-                    if (state[row+x][col+y] != EMPTY) {
+                    if (state[row+x][col+y] != EMPTY || (row+x) >= 9 || col+y >= 5 ) {
                         return false;
                     }
                 }
             }
-            return true;
-
-
-
 
             }
 
