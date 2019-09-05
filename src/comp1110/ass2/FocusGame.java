@@ -3,6 +3,7 @@ package comp1110.ass2;
 import java.util.Arrays;
 import java.util.Set;
 
+import static comp1110.ass2.Shape.getShape;
 import static comp1110.ass2.State.*;
 
 /**
@@ -129,14 +130,36 @@ public class FocusGame {
             return false;
         }
 
-        // is each piece entirely on the board
+        // need some code that rotates the pieces -- make a method in the orientation
+
+
+        // checks each piece in the placement
         int length = placement.length();
         int N = length / 4;
 
-        State[][] b = Shape.a.getShape();
-
 
         for (int i = 0; i < N; i++) {
+            char s = placement.charAt(i);
+            // should get rotated version but this is currently un-rotated
+            State[][] state = getShape(s);
+
+            int row = placement.charAt(i+1);
+            int col = placement.charAt(i+2);
+
+            int rowNo = state[0].length;
+            int colNo = state.length;
+
+            for (int x = 0; x < rowNo; x++) {
+                for (int y = 0; y < colNo; y++) {
+                    if (state[row+x][col+y] != EMPTY) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+
+
+
 
             }
 
@@ -207,5 +230,6 @@ public class FocusGame {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
         return null;
     }
+
 
 }
