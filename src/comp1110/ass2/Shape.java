@@ -11,7 +11,8 @@ public enum Shape {
         this.shape = shape;
     }
 
-    public State[][] getShape() {
+
+    public static State[][] getShape(char shape) {
 
         State[][] a = {{GREEN, WHITE, RED, null, RED, null}};
         State[][] b = {{null, BLUE, GREEN, GREEN, WHITE, WHITE, null, null}};
