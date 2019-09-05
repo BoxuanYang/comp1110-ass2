@@ -133,6 +133,9 @@ public class FocusGame {
         int length = placement.length();
         int N = length / 4;
 
+        State[][] b = Shape.a.getShape();
+
+
         for (int i = 0; i < N; i++) {
 
             }
