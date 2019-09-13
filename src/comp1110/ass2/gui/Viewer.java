@@ -49,16 +49,20 @@ public class Viewer extends Application {
             pieces[i] = placement.charAt(4*i);
             orien[i] = placement.charAt(3 + 4*i);
             xPos[i] = placement.charAt(1 + 4*i) - '0';
-            yPos[i] = placement.charAt(2+4*i) - '0';
+            yPos[i] = placement.charAt(2 + 4 * i) - '0';
         }
 
         Image[] image = new Image[n];
         ImageView iv1 = new ImageView();
-
         for(int i = 0; i < n; i++){
-            image[i] = new Image(URI_BASE + pieces[i] + ".png");
-            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + pieces[i] + ".png").toString()));
+            String piece = String.valueOf(pieces[i]);
+
+            //image[i] = new Image(URI_BASE + piece + ".png");
+            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString()));
+
+
         }
+
 
         // FIXME Task 4: implement the simple placement viewer
 
