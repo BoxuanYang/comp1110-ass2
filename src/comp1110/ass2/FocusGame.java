@@ -17,15 +17,14 @@ import static comp1110.ass2.State.*;
 public class FocusGame {
 
 
-    private State[][] boardstates = {
-        {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY},
-            {null, EMPTY, EMPTY,EMPTY, EMPTY, EMPTY,EMPTY, EMPTY, null},
+    public static State[][] boardStates = {
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {null, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, null},
 
     };
-
 
 
     /**
@@ -137,26 +136,33 @@ public class FocusGame {
         int length = placement.length();
 
 
-        for (int i = 0; i+4 < length; i = i + 4) {
+        for (int i = 0; i + 4 < length; i = i + 4) {
             char s = placement.charAt(i);
             // should get rotated version but this is currently un-rotated
             State[][] state = getShape(s);
 
-            int row = placement.charAt(i+1);
-            int col = (int) placement.charAt(i+2);
+            int col = Character.getNumericValue(placement.charAt(i + 1));
+            int row = Character.getNumericValue(placement.charAt(i + 2));
 
             int rowNo = state[0].length;
             int colNo = state.length;
 
-            for (int x = 0; x < rowNo; x++) {
-                for (int y = 0; y < colNo; y++) {
-                    if (state[row+x][col+y] != EMPTY || (row+x) >= 9 || col+y >= 5 ) {
-                        return false;
+            for (int x = 0; x < colNo; x++) {
+                for (int y = 0; y < rowNo; y++) {
+                    // take into account the null bit of state[][]
+                    if (state[x][y] != null) {
+                        if ((boardStates[col + x][row + y] != EMPTY)) {
+                            return false;
+                        } else if ((row + y) > 4) {
+                            return false;
+                        } else if ((col + x) > 8) {
+                            return false;
+                        }
                     }
                 }
             }
 
-            }
+        }
 
 
         // FIXME Task 5: determine whether a placement string is valid
@@ -199,7 +205,6 @@ public class FocusGame {
         char[] colours = challenge.toCharArray();
 
         // check if colour matches challenge square
-
 
 
         return null;
