@@ -128,15 +128,11 @@ public class FocusGame {
         if (!isPlacementStringWellFormed(placement)) {
             return false;
         }
-
         // need some code that rotates the pieces -- make a method in the orientation
 
-
-        // checks each piece in the placement
         int length = placement.length();
 
-
-        for (int i = 0; i + 4 <= length; i = i + 4) {
+        for (int i = 0; i + 4 < length; i = i + 4) {
             char s = placement.charAt(i);
 
             // should get rotated version but this is currently un-rotated
@@ -158,9 +154,7 @@ public class FocusGame {
                         if ((boardStates[x + x1][y + y1] != EMPTY)) {
                             return false;
                             // check if piece is outside the board
-                        } else if ((y + y1) > 4) {
-                            return false;
-                        } else if ((x + x1) > 8) {
+                        } else if (((y + y1) > 8) || ((x+x1) > 4)) {
                             return false;
                         }
                     }
@@ -172,6 +166,8 @@ public class FocusGame {
         // FIXME Task 5: determine whether a placement string is valid
         return true;
     }
+
+
 
     /**
      * Given a string describing a placement of pieces and a string describing
@@ -235,5 +231,5 @@ public class FocusGame {
         return null;
     }
 
-
 }
+
