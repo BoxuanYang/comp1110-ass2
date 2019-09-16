@@ -136,32 +136,36 @@ public class FocusGame {
         int length = placement.length();
 
 
-        for (int i = 0; i + 4 < length; i = i + 4) {
+        for (int i = 0; i + 4 <= length; i = i + 4) {
             char s = placement.charAt(i);
+
             // should get rotated version but this is currently un-rotated
-            State[][] state = getShape(s);
+            State[][] piece = getShape(s);
 
-            int col = Character.getNumericValue(placement.charAt(i + 1));
-            int row = Character.getNumericValue(placement.charAt(i + 2));
 
-            int rowNo = state[0].length;
-            int colNo = state.length;
+            int y = Character.getNumericValue(placement.charAt(i + 1));
+            int x = Character.getNumericValue(placement.charAt(i + 2));
 
-            for (int x = 0; x < colNo; x++) {
-                for (int y = 0; y < rowNo; y++) {
-                    // take into account the null bit of state[][]
-                    if (state[x][y] != null) {
-                        if ((boardStates[col + x][row + y] != EMPTY)) {
+
+            int rowNo = piece.length;
+            int colNo = piece[0].length;
+
+
+            for (int y1 = 0; y1 < colNo; y1++) {
+                for (int x1 = 0; x1 < rowNo; x1++) {
+                    if (piece[x1][y1] != null) {
+                        // check if the the piece does not overlap another and is on the board
+                        if ((boardStates[x + x1][y + y1] != EMPTY)) {
                             return false;
-                        } else if ((row + y) > 4) {
+                            // check if piece is outside the board
+                        } else if ((y + y1) > 4) {
                             return false;
-                        } else if ((col + x) > 8) {
+                        } else if ((x + x1) > 8) {
                             return false;
                         }
                     }
                 }
             }
-
         }
 
 
