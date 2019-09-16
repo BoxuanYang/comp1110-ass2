@@ -4,7 +4,7 @@ import static comp1110.ass2.Shape.getShape;
 
 public class Rotation {
 
-    public State[][] toRotate(char shape, int rotation) {
+    public static State[][] toRotate(char shape, int rotation) {
         State[][] s = getShape(shape);
         int rowLength = s.length;
         int colLength = s[0].length;
