@@ -16,14 +16,61 @@ import static comp1110.ass2.State.*;
 
 public class FocusGame {
 
-
     public static State[][] boardStates = {
             {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
             {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
             {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
             {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {null, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, null},
+            {null,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, null },
 
+    };
+
+    //The width and height for all pieces in orientation 0
+    static int[][] width_and_height = {
+            {3, 2},//a
+            {4, 2},//b
+            {4, 2},//c
+            {3, 2},//d
+            {3, 2},//e
+            {3, 1},//f
+            {3, 2},//g
+            {3, 3},//h
+            {2, 2},//i
+            {4, 2}//j
+    };
+
+    //All states of all pieces in orientation 0
+    static State[][] pieceMap = {
+            {GREEN, WHITE, RED,//a
+             null,  RED,   null},
+
+            {null,  BLUE, GREEN, GREEN,//b
+             WHITE, WHITE, null, null},
+
+
+            {null, null, GREEN,  null,//c
+             RED,   RED,  WHITE, BLUE},
+
+            {RED,   RED,    RED,//d
+             null,  null,   BLUE},
+
+            {BLUE,  BLUE,  BLUE,//e
+             RED,   RED,   null},
+
+            {WHITE, WHITE, WHITE},//f
+
+            {WHITE, BLUE,  null,
+             null,  BLUE,  WHITE},//g
+
+            {RED, GREEN, GREEN,//h
+             WHITE, null,null,
+             WHITE, null, null},
+
+            {BLUE,  BLUE,//i
+             null,  WHITE},
+
+            {GREEN, GREEN, WHITE, RED,//j
+             GREEN, null,  null,  null}
     };
 
 
@@ -63,6 +110,189 @@ public class FocusGame {
 
         // the fourth character is in the range 0 .. 3 (orientation)
         return piecePlacement.charAt(3) <= '3' && piecePlacement.charAt(3) >= '0';
+    }
+
+    /**
+     * Given a piece placement, return the width specified by its type and orientation
+     * @param placement a well-formed piece placement
+     * @return an int value
+     */
+    public static int getWidth(String placement){
+        int type = placement.charAt(0) - 97;
+        int ori = placement.charAt(3) - '0';
+
+        int width = width_and_height[type][0];
+        int height = width_and_height[type][1];
+
+        //If orientation is 1 or 3, then switch width and height
+        if(ori % 2 == 1){
+            int t = width;
+            width = height;
+            height = t;
+        }
+
+        return width;
+    }
+
+    /**
+     * Given a piece placement, return the width specified by its type and orientation
+     * @param placement a well-formed piece placement
+     * @return an int value
+     */
+    public static int getHeight(String placement){
+        int type = placement.charAt(0) - 97;
+        int ori = placement.charAt(3) - '0';
+
+        int width = width_and_height[type][0];
+        int height = width_and_height[type][1];
+        //If orientation is 1 or 3, then switch width and height
+        if(ori % 2 == 1){
+            int t = width;
+            width = height;
+            height = t;
+        }
+
+        return height;
+    }
+
+    /**
+     * Given the orientation, xoff distance off left-top point and yoff distance off left-top point
+     * ,return the state at that position
+     * @param placement a  well-formed piece placement string
+     * @param xoff x-axis distance from top-left point
+     * @param yoff y-axis distance from top-left point
+     * @return an object of type State
+     *                                               19   18   17   16
+     *      0  1  2     3       16  12  8  4  0      15   14   13   12     3  7  11  15  19
+     *      4  5  6     7       17  13  9  5  1      11   10   9    8      2  6  10  14  18
+     *      8  9  10    11      18  14  10 6  2      7    6    5    4      1  5  9   13  17
+     *      12 13 14    15      19  15  11 7  3      3    2    1    0      0  4  8   12  16
+     *      16 17 18    19
+     *
+     *
+     *
+     *
+     *      0 1 2 3    4 0    7 6 5 4    3 7
+     *      4 5 6 7    5 1    3 2 1 0    2 6
+     *                 6 2               1 5
+     *                 7 3               0 4
+     */
+    public static State getState(String placement, int xoff, int yoff){
+        int type = placement.charAt(0) - 97;//
+        int width = width_and_height[type][0];
+        int height = width_and_height[type][1];
+        int ori = placement.charAt(3) - '0';
+
+        if(ori == 0){
+            //                    xoff + yoff * width
+            return pieceMap[type][xoff + yoff * width];
+        }
+
+        if(ori == 1){
+            //                    yoff +  width  - xoff      * width
+            /*System.out.println("The width is: " +width);
+            System.out.println("The height is: " + height);
+            System.out.println("The index is: " + yoff + (width -1 - xoff) * width);
+            System.out.println(yoff);*/
+            return pieceMap[type][yoff + (height -1 - xoff) * width];
+        }
+
+        if(ori == 2){
+            //                  width - xoff    height - yoff    * width
+            return pieceMap[type][(width- 1 - xoff) + (height - 1 - yoff) * width];
+        }
+
+        //                    width - yoff + xoff * width
+        return pieceMap[type][(width - 1 - yoff) + xoff * width];
+    }
+
+    /**The placement string can be assumed to be well-formed
+     * Return true if it is within the board, false otherwise
+     * @param placement a piece placement string of length 4
+     * @return a boolean value
+     */
+    public static boolean isPieceOnBoard(String placement){
+        int x = placement.charAt(1) - '0';
+        int y = placement.charAt(2) - '0';
+        int width = getWidth(placement);
+        int height = getHeight(placement);
+
+        for(int xoff = 0; xoff < width; xoff++){
+            for(int yoff = 0; yoff < height; yoff++){
+                State state = getState(placement, xoff, yoff);
+                //Ignore the case the sqaures to which to piece extends is null
+                if(state == null){
+                    continue;
+                }
+
+                //If a sqaure reaches out of the board
+                if(x + xoff > 8 || y + yoff > 4){
+                    return false;
+                }
+                //If a square lies in the null positions in boardState
+                if(boardStates[y + yoff][x + xoff] == null){
+                    return false;
+                }
+        }
+    }
+        return true;
+    }
+
+    /**
+     * The two placmeent string can be assumed to be well-formed and within the board
+     * @param str1 First piece placement String
+     * @param str2 Second piece placement String
+     * @return return true if two strings overlap, false other wise
+     */
+    public static boolean doesPlacementOverlap(String str1, String str2){
+        int x1 = str1.charAt(1) - '0';
+        int y1 = str1.charAt(2) - '0';
+        int width1 = getWidth(str1);
+        int height1 = getHeight(str1);
+
+        int x2 = str2.charAt(1) - '0';
+        int y2 = str2.charAt(2) - '0';
+        int width2 = getWidth(str2);
+        int height2 = getHeight(str2);
+
+         State[][] board = {
+                {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+                {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+                {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+                {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+                {null,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, null},
+
+        };
+
+         //Update String str1
+         for(int xoff = 0; xoff < width1; xoff++){
+             for(int yoff = 0; yoff < height1; yoff++){
+                 State s = getState(str1, xoff, yoff);
+                 //Ignore null squares
+                 if(s == null){
+                     continue;
+                 }
+
+                 board[y1 + yoff][x1 + xoff] = s;
+             }
+         }
+
+         //Check in all squares of str2, does it overlap with str1
+        for(int xoff = 0; xoff < width2; xoff++){
+            for(int yoff = 0; yoff < height2; yoff++){
+                State s = getState(str2, xoff, yoff);
+                //Ignore null squares
+                if(s == null){
+                    continue;
+                }
+
+                if(board[y2 + yoff][x2 + xoff] != EMPTY){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -124,19 +354,16 @@ public class FocusGame {
      * @return True if the placement sequence is valid
      */
     public static boolean isPlacementStringValid(String placement) {
+        // FIXME Task 5: determine whether a placement string is valid
         // is placement string well formed
         if (!isPlacementStringWellFormed(placement)) {
             return false;
         }
-
         // need some code that rotates the pieces -- make a method in the orientation
 
+        /*int length = placement.length();
 
-        // checks each piece in the placement
-        int length = placement.length();
-
-
-        for (int i = 0; i + 4 <= length; i = i + 4) {
+        for (int i = 0; i + 4 < length; i = i + 4) {
             char s = placement.charAt(i);
 
             // should get rotated version but this is currently un-rotated
@@ -158,20 +385,42 @@ public class FocusGame {
                         if ((boardStates[x + x1][y + y1] != EMPTY)) {
                             return false;
                             // check if piece is outside the board
-                        } else if ((y + y1) > 4) {
-                            return false;
-                        } else if ((x + x1) > 8) {
+                        } else if (((y + y1) > 8) || ((x+x1) > 4)) {
                             return false;
                         }
                     }
                 }
             }
+        }*/
+
+        //n is Number of pieces
+        int n = placement.length() / 4;
+        String[] pieces = new String[n];
+
+
+        //Create an array of Strings where each element of it is a well-formed piece placement
+        for(int i = 0; i < n; i++){
+            pieces[i] = placement.substring(4 * i, 4 * i + 4);
+            //Check whether each element of the array is within the board
+            if(!isPieceOnBoard(pieces[i])){
+                return false;
+            }
         }
 
+        //Does any two of the pice placements overlap?
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n - 1 - i; j++){
+                //if they overlap, return false
+                if(doesPlacementOverlap(pieces[i], pieces[i + 1 + j])){
+                    return false;
+                }
+            }
+        }
 
-        // FIXME Task 5: determine whether a placement string is valid
         return true;
     }
+
+
 
     /**
      * Given a string describing a placement of pieces and a string describing
@@ -235,5 +484,5 @@ public class FocusGame {
         return null;
     }
 
-
 }
+
