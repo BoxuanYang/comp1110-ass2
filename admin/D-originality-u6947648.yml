@@ -12,7 +12,7 @@
 declaration: >-
   I declare that everything I have submitted for stage D of this assignment
   and all stages before it is entirely my own work, with the following
-  exceptions:
+  #exceptions:
 
 
 # Use this to list names of people who you collaborated with, and a
@@ -21,8 +21,8 @@ declaration: >-
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
 #collaboration:
-# - name:
-#  comment: >-
+ # - name:
+  #  comment: >-
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -32,9 +32,9 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
 #code:
-# - comment:
-#  url:
-# licence:
+ # - comment:
+  #  url:
+   # licence:
 
 # Use this to list any assets (artwork, sound, etc) that you used.
 # Provide a comment explaining your use of that asset and the URL
@@ -49,5 +49,5 @@ declaration: >-
 
 
 # sign *your* name and uid here
-name: Apoorva Sajja
-uid: u6420904
+name: Nicole Wang
+uid: u6947648
