@@ -9,7 +9,7 @@ public class Rotation {
         int rowLength = s.length;
         int colLength = s[0].length;
 
-        State[][] rotated = new State[rowlength][colLength];
+        State[][] rotated = new State[rowLength][colLength];
 
         if (rotation == 1) {
             for (int c = 0; c < colLength; c++) {
@@ -32,7 +32,7 @@ public class Rotation {
         if (rotation == 3) {
             for (int c = 0; c < colLength; c++) {
                 for (int r = 0; r < rowLength; r++) {
-                    rotated[r][c] = s[colLength - c -q][r];
+                    rotated[r][c] = s[colLength - c -1][r];
                 }
 
             }
