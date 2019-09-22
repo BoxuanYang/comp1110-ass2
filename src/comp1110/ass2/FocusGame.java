@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static comp1110.ass2.Shape.getShape;
@@ -397,7 +398,6 @@ public class FocusGame {
         int n = placement.length() / 4;
         String[] pieces = new String[n];
 
-
         //Create an array of Strings where each element of it is a well-formed piece placement
         for(int i = 0; i < n; i++){
             pieces[i] = placement.substring(4 * i, 4 * i + 4);
@@ -409,9 +409,9 @@ public class FocusGame {
 
         //Does any two of the pice placements overlap?
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < n - 1 - i; j++){
+            for(int j = i + 1; j < n; j++){
                 //if they overlap, return false
-                if(doesPlacementOverlap(pieces[i], pieces[i + 1 + j])){
+                if(doesPlacementOverlap(pieces[i], pieces[j])){
                     return false;
                 }
             }
@@ -420,8 +420,41 @@ public class FocusGame {
         return true;
     }
 
+    /**
+     * Given a piece, return true if it fits the challenge specified by the challenge string, false otherwise
+     * @param piece A well-formed piece placement string
+     * @param challenge A challenge stirng consists of 9 characters of 4 types, i.e. 'W', 'R', 'B', 'G'
+     * @param col The col of the piece to be placed
+     * @param row the row of the piece to be placed
+     * @return a boolean value
+     */
+    static boolean fitChallenge(String piece, String challenge, int col, int row){
+        int width = getWidth(piece);
+        int height = getHeight(piece);
+        return true;
+    }
 
+    /**
+     * Given a placement string and a pice placement string, return true if the pice placement does not
+     * overlap with the placement string and false otherwise.
+     * @param placement A placement string consists of multiple piece placements
+     * @param piece A piece placement string
+     * @return A boolean value
+     */
+    static boolean fitPlacement(String placement, String piece){
+        return true;
+    }
 
+    /**
+     * Given a placement string and a piece placement string, return true if the piece
+     * to be placed is already included in placement string.
+     * @param placement A valid placement string
+     * @param piece A well-formed piece placement
+     * @return A boolean value
+     */
+    static boolean contains(String placement, String piece){
+        return true;
+    }
     /**
      * Given a string describing a placement of pieces and a string describing
      * a challenge, return a set of all possible next viable piece placements
@@ -454,13 +487,22 @@ public class FocusGame {
             return null;
         }
 
+        Set pieces = new HashSet();
+        for(char a = 'a'; a <= 'j'; a++){
+            for(int ori = 0; ori < 4; ori++){
+                String piece = String.valueOf(a) + String.valueOf(col) + String.valueOf(row) + String.valueOf(ori);
+
+                if(fitChallenge(piece, challenge, col, row)){
+                    pieces.add(piece);
+                }
+            }
+        }
         // array of challenge colours
         char[] colours = challenge.toCharArray();
 
         // check if colour matches challenge square
 
-
-        return null;
+        return pieces;
     }
 
     /**
