@@ -1,6 +1,5 @@
 package comp1110.ass2.gui;
 
-import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
