@@ -24,7 +24,7 @@ public class ViablePlacementsTest {
                         " but got " + outSet.toString(), outSet == null);
         } else {
             String expstr = expected.toString();
-            assertTrue("Got null for input " + start + ", but expected " + expstr, outSet != null);
+            assertTrue("Got null for input " + start + ", but expected " + expstr + " at x-position " + xLoc + " y-position " + yLoc + " for objective: " + objective, outSet != null);
             TreeSet<String> out = new TreeSet<>();
             out.addAll(outSet);
             String outstr = out.toString();

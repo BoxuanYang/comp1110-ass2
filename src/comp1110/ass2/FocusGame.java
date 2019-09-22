@@ -1,5 +1,6 @@
 package comp1110.ass2;
-
+import java.util.TreeSet;
+import java.util.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +49,6 @@ public class FocusGame {
             {null,  BLUE, GREEN, GREEN,//b
              WHITE, WHITE, null, null},
 
-
             {null, null, GREEN,  null,//c
              RED,   RED,  WHITE, BLUE},
 
@@ -73,7 +73,6 @@ public class FocusGame {
             {GREEN, GREEN, WHITE, RED,//j
              GREEN, null,  null,  null}
     };
-
 
     /**
      * Determine whether a piece placement is well-formed according to the
@@ -157,29 +156,15 @@ public class FocusGame {
     }
 
     /**
-     * Given the orientation, xoff distance off left-top point and yoff distance off left-top point
+     * Given a piece placement string, xoff distance off left-top point and yoff distance off left-top point
      * ,return the state at that position
-     * @param placement a  well-formed piece placement string
+     * @param placement A  well-formed piece placement string
      * @param xoff x-axis distance from top-left point
      * @param yoff y-axis distance from top-left point
      * @return an object of type State
-     *                                               19   18   17   16
-     *      0  1  2     3       16  12  8  4  0      15   14   13   12     3  7  11  15  19
-     *      4  5  6     7       17  13  9  5  1      11   10   9    8      2  6  10  14  18
-     *      8  9  10    11      18  14  10 6  2      7    6    5    4      1  5  9   13  17
-     *      12 13 14    15      19  15  11 7  3      3    2    1    0      0  4  8   12  16
-     *      16 17 18    19
-     *
-     *
-     *
-     *
-     *      0 1 2 3    4 0    7 6 5 4    3 7
-     *      4 5 6 7    5 1    3 2 1 0    2 6
-     *                 6 2               1 5
-     *                 7 3               0 4
      */
     public static State getState(String placement, int xoff, int yoff){
-        int type = placement.charAt(0) - 97;//
+        int type = placement.charAt(0) - 97;
         int width = width_and_height[type][0];
         int height = width_and_height[type][1];
         int ori = placement.charAt(3) - '0';
@@ -191,10 +176,6 @@ public class FocusGame {
 
         if(ori == 1){
             //                    yoff +  width  - xoff      * width
-            /*System.out.println("The width is: " +width);
-            System.out.println("The height is: " + height);
-            System.out.println("The index is: " + yoff + (width -1 - xoff) * width);
-            System.out.println(yoff);*/
             return pieceMap[type][yoff + (height -1 - xoff) * width];
         }
 
@@ -240,6 +221,7 @@ public class FocusGame {
     }
 
     /**
+     * Given two pieces placement, return true if they overlap and false otherwise.
      * The two placmeent string can be assumed to be well-formed and within the board
      * @param str1 First piece placement String
      * @param str2 Second piece placement String
@@ -360,39 +342,6 @@ public class FocusGame {
         if (!isPlacementStringWellFormed(placement)) {
             return false;
         }
-        // need some code that rotates the pieces -- make a method in the orientation
-
-        /*int length = placement.length();
-
-        for (int i = 0; i + 4 < length; i = i + 4) {
-            char s = placement.charAt(i);
-
-            // should get rotated version but this is currently un-rotated
-            State[][] piece = getShape(s);
-
-
-            int y = Character.getNumericValue(placement.charAt(i + 1));
-            int x = Character.getNumericValue(placement.charAt(i + 2));
-
-
-            int rowNo = piece.length;
-            int colNo = piece[0].length;
-
-
-            for (int y1 = 0; y1 < colNo; y1++) {
-                for (int x1 = 0; x1 < rowNo; x1++) {
-                    if (piece[x1][y1] != null) {
-                        // check if the the piece does not overlap another and is on the board
-                        if ((boardStates[x + x1][y + y1] != EMPTY)) {
-                            return false;
-                            // check if piece is outside the board
-                        } else if (((y + y1) > 8) || ((x+x1) > 4)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }*/
 
         //n is Number of pieces
         int n = placement.length() / 4;
@@ -420,45 +369,160 @@ public class FocusGame {
         return true;
     }
 
+
     /**
-     * Given a piece, return true if it fits the challenge specified by the challenge string, false otherwise
-     * @param piece A well-formed piece placement string
-     * @param challenge A challenge stirng consists of 9 characters of 4 types, i.e. 'W', 'R', 'B', 'G'
-     * @param col The col of the piece to be placed
-     * @param row the row of the piece to be placed
-     * @return a boolean value
+     * Given a pair of coordinates, return true if they are within the central board.
+     * central board: (3,1) -> (5,1)
+     *                (3,2) -> (5,2)
+     *                (3,3) -> (5,3)
+     * @param x
+     * @param y
+     * @return A boolean value
      */
-    static boolean fitChallenge(String piece, String challenge, int col, int row){
-        int width = getWidth(piece);
-        int height = getHeight(piece);
-        return true;
+    static boolean withinCentralBoard(int x, int y){
+        return x >= 3 && x <= 5 && y >= 1 && y<= 3;
     }
+
+
+    /**
+     * Given a char, return the corresponding state.
+     * @param x A char whose value can only be 'W', 'R', 'B', 'G'
+     * @return A State
+     */
+    static State charToState(char x){
+        if(x == 'W'){
+            return WHITE;
+        }
+        if(x == 'R'){
+            return RED;
+        }
+        if(x == 'B'){
+            return BLUE;
+        }
+        return GREEN;
+    }
+
+
+    /**
+     * Given a placement string and a char type, return true if the type
+     * is already included in placement string.
+     * @param placement A valid placement string
+     * @param type A char representing the type of the piece
+     * @return A boolean value
+     */
+    static boolean contains(String placement, char type){
+        //placement string consists of n pieces
+        int n = placement.length() / 4;
+        if(placement == null || placement == ""){
+            return false;
+        }
+        for(int  i = 0; i < n; i++){
+            if(placement.charAt(i * 4) == type){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Given a placement string and a pice placement string, return true if the pice placement does not
-     * overlap with the placement string and false otherwise.
+     * overlap with the placement string and false otherwise. We can assume the piece is not included in
+     * placement string.
      * @param placement A placement string consists of multiple piece placements
      * @param piece A piece placement string
      * @return A boolean value
      */
     static boolean fitPlacement(String placement, String piece){
+        //placement string consists of n pieces
+        int n = placement.length() / 4;
+        //Return true if the input placement is empty
+        if(placement == "" || placement == null){
+            return true;
+        }
+
+        for(int  i= 0; i < n; i++){
+            String str = placement.substring(i * 4, i * 4 + 4);
+            //If piece overlaps with any of the pieces, return false
+            if(doesPlacementOverlap(str, piece)){
+                return false;
+            }
+        }
         return true;
     }
 
     /**
-     * Given a placement string and a piece placement string, return true if the piece
-     * to be placed is already included in placement string.
-     * @param placement A valid placement string
-     * @param piece A well-formed piece placement
+     * Given a piece, return true if it fits the challenge specified by the challenge string, false otherwise
+     * @param piece A well-formed piece placement string
+     * @param challenge A challenge stirng consists of 9 characters of 4 types, i.e. 'W', 'R', 'B', 'G'
+     * @return A boolean value
+     *
+     * central board: (3,1) -> (5,1)
+     *                (3,2) -> (5,2)
+     *                (3,3) -> (5,3)
+     */
+    static boolean fitChallenge(String piece, String challenge){
+        int x = piece.charAt(1) - '0';
+        int y = piece.charAt(2) - '0';
+        int width = getWidth(piece);
+        int height = getHeight(piece);
+
+        for(int xoff = 0; xoff < width; xoff++){
+            for(int yoff = 0; yoff < height; yoff++){
+                //Skip the loop if the square does not lie within the central board
+                if(!withinCentralBoard(x + xoff, y + yoff)){
+                    continue;
+                }
+
+                State pieceState = getState(piece, xoff, yoff);
+                //Skip the loop if the pieceState is null
+                if(pieceState == null){
+                    continue;
+                }
+
+                //The index of the corresponding state in challenge string
+                int index = (x + xoff) % 3 + (y + yoff - 1) * 3;
+                char c  = challenge.charAt(index);
+                State boardState = charToState(c);
+
+                //Return false if the pieceState is not null and it does not equal to boardState
+                if(pieceState != boardState){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Given a piece placement and a square with coordinate (col, row), return true if
+     * the piece covers the square and flase otherwise
+     * @param piece A piece placement
+     * @param col X-coordinate of the target square
+     * @param row Y-coordinate of the target square
      * @return A boolean value
      */
-    static boolean contains(String placement, String piece){
-        return true;
+    static boolean doesPieceCover(String piece, int col, int row){
+        int width = getWidth(piece);
+        int height = getHeight(piece);
+        int x = piece.charAt(1) - '0';
+        int y = piece.charAt(2) - '0';
+
+        //Go through every square covered by the piece
+        for(int xoff = 0; xoff < width; xoff++){
+            for(int yoff = 0; yoff < height; yoff++){
+                if(x + xoff == col && y + yoff == row){
+                    State pieceState = getState(piece, xoff, yoff);
+                    return pieceState != null;
+                }
+            }
+        }
+        return false;
     }
     /**
      * Given a string describing a placement of pieces and a string describing
      * a challenge, return a set of all possible next viable piece placements
-     * which cover a specific board cell.
+     * which cover a specific board location.
      * <p>
      * For a piece placement to be viable
      * - it must be valid
@@ -476,32 +540,53 @@ public class FocusGame {
      *                  - 'B' = Blue square
      *                  - 'G' = Green square
      *                  - 'W' = White square
-     * @param col       The cell's column.
-     * @param row       The cell's row.
+     * @param col       The position's column.
+     * @param row       The position's row.
      * @return A set of viable piece placements, or null if there are none.
      */
     static Set<String> getViablePiecePlacements(String placement, String challenge, int col, int row) {
         // FIXME Task 6: determine the set of all viable piece placements given existing placements and a challenge
-        // Placement string is valid
-        if (!isPlacementStringValid(placement)) {
+        //If the placement string is not valid
+        if(placement != null && placement != "" && !isPlacementStringValid(placement)){
             return null;
         }
 
         Set pieces = new HashSet();
-        for(char a = 'a'; a <= 'j'; a++){
-            for(int ori = 0; ori < 4; ori++){
-                String piece = String.valueOf(a) + String.valueOf(col) + String.valueOf(row) + String.valueOf(ori);
 
-                if(fitChallenge(piece, challenge, col, row)){
-                    pieces.add(piece);
+        //Generate the set of all strings which covers (col,row)
+        for(char type = 'a'; type <= 'j'; type++){
+            if(contains(placement, type)){
+                continue;
+            }
+            for(int x = 0; x < 9; x++){
+                for(int y = 0; y < 5; y++){
+                    for(int ori = 0; ori < 4; ori++){
+                        String piece = String.valueOf(type) + String.valueOf(x) + String.valueOf(y) + String.valueOf(ori);
+                        if(!isPieceOnBoard(piece)){
+                            continue;
+                        }
+
+                        if(!doesPieceCover(piece, col, row)){
+                            continue;
+                        }
+
+                        if(!fitPlacement(placement, piece)){
+                            continue;
+                        }
+
+                        if(!fitChallenge(piece, challenge)){
+                            continue;
+                        }
+
+                        pieces.add(piece);
+                    }
                 }
             }
         }
-        // array of challenge colours
-        char[] colours = challenge.toCharArray();
-
-        // check if colour matches challenge square
-
+        //Return null if there is no element in Set pieces
+        if(pieces.size() == 0){
+            return null;
+        }
         return pieces;
     }
 

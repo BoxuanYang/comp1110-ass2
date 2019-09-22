@@ -50,7 +50,38 @@ public class Viewer extends Application {
             {4, 2}//j
     };
 
+    void drawHorizontal(){
+        int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
+        int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
+        //Draw the horizontal lines
+        for(int i = 0; i < 6; i++){
+            //Last line should be of length 7 SQUARE_SIZE
+            if(i == 5){
+                Line horizontal = new Line(initialX + SQUARE_SIZE, initialY + 5 * SQUARE_SIZE, initialX + SQUARE_SIZE * 8, initialY + 5 * SQUARE_SIZE);
+                controls.getChildren().add(horizontal);
+                continue;
+            }
+            Line horizontal = new Line(initialX, initialY + i * SQUARE_SIZE, initialX + SQUARE_SIZE * COLUMNS, initialY + i * SQUARE_SIZE);
+            controls.getChildren().add(horizontal);
+        }
+    }
 
+    void drawVertical(){
+        int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
+        int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
+        //Draw the vertical lines
+        for(int i = 0; i < 10; i++){
+            //First and Last vertical line should be of length SQUARE_SIZE * 4
+            if(i == 0 || i == 9){
+                Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 4 * SQUARE_SIZE);
+                controls.getChildren().add(vertical);
+                continue;
+            }
+
+            Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 5 * SQUARE_SIZE);
+            controls.getChildren().add(vertical);
+        }
+    }
 
     /**
      * Draw a placement in the window, removing any previously drawn one
@@ -64,30 +95,8 @@ public class Viewer extends Application {
         root.getChildren().clear();
         root.getChildren().add(controls);
 
-        //Draw the horizontal lines
-        for(int i = 0; i < 6; i++){
-            //Last line should be of length 7 SQUARE_SIZE
-            if(i == 5){
-                Line horizontal = new Line(initialX + SQUARE_SIZE, initialY + 5 * SQUARE_SIZE, initialX + SQUARE_SIZE * 8, initialY + 5 * SQUARE_SIZE);
-                controls.getChildren().add(horizontal);
-                continue;
-            }
-            Line horizontal = new Line(initialX, initialY + i * SQUARE_SIZE, initialX + SQUARE_SIZE * COLUMNS, initialY + i * SQUARE_SIZE);
-            controls.getChildren().add(horizontal);
-        }
-
-        //Draw the vertical lines
-        for(int i = 0; i < 10; i++){
-            //First and Last vertical line should be of length SQUARE_SIZE * 4
-            if(i == 0 || i == 9){
-                Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 4 * SQUARE_SIZE);
-                controls.getChildren().add(vertical);
-                continue;
-            }
-
-            Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 5 * SQUARE_SIZE);
-            controls.getChildren().add(vertical);
-        }
+        drawHorizontal();
+        drawVertical();
 
         //Get the piece placement strings
         int n = placement.length() / 4;
@@ -173,6 +182,8 @@ public class Viewer extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("FocusGame Viewer");
+        drawVertical();
+        drawHorizontal();
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
         root.getChildren().add(controls);

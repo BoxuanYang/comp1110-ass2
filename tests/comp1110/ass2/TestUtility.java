@@ -422,8 +422,8 @@ class Solution {
 }
 
 class ViablePlacement {
-    String objective;
     String start;
+    String objective;
     int xLoc;
     int yLoc;
     String expected;
@@ -432,8 +432,9 @@ class ViablePlacement {
                     String iObjective,
                     int iX, int iY,
                     String iExpected) {
-        objective = iObjective;
+
         start = iStart;
+        objective = iObjective;
         xLoc = iX;
         yLoc = iY;
         expected = iExpected;
