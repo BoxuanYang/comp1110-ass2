@@ -555,29 +555,35 @@ public class FocusGame {
 
         //Generate the set of all strings which covers (col,row)
         for(char type = 'a'; type <= 'j'; type++){
+            //Skip if this type is already included in the placement
             if(contains(placement, type)){
                 continue;
             }
-            for(int x = 0; x < 9; x++){
-                for(int y = 0; y < 5; y++){
+            for(int x = 0; x <= col; x++){
+                for(int y = 0; y <= row; y++){
                     for(int ori = 0; ori < 4; ori++){
                         String piece = String.valueOf(type) + String.valueOf(x) + String.valueOf(y) + String.valueOf(ori);
+                        //Skip if this one is not on board
                         if(!isPieceOnBoard(piece)){
                             continue;
                         }
 
+                        //Skip if this one does not cover (col, row)
                         if(!doesPieceCover(piece, col, row)){
                             continue;
                         }
 
+                        //Skip if this one overlap with initial placement
                         if(!fitPlacement(placement, piece)){
                             continue;
                         }
 
+                        //Skip if this one does not fit challenge
                         if(!fitChallenge(piece, challenge)){
                             continue;
                         }
 
+                        //Add it if it passes all the tests above
                         pieces.add(piece);
                     }
                 }
