@@ -83,6 +83,11 @@ public class Viewer extends Application {
         }
     }
 
+    void drawBoard() {
+        drawHorizontal();
+        drawVertical();
+    }
+
     /**
      * Draw a placement in the window, removing any previously drawn one
      *
