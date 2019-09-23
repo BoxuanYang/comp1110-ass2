@@ -35,7 +35,7 @@ public class Viewer extends Application {
     private static final String URI_BASE = "assets/";
 
     private final Group root = new Group();
-    private final Group controls = new Group();
+    public static Group controls = new Group();
     private TextField textField;
     int[][] width_and_height = {
             {3, 2},//a
@@ -50,7 +50,7 @@ public class Viewer extends Application {
             {4, 2}//j
     };
 
-    void drawHorizontal(){
+    static void drawHorizontal(){
         int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
         int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
         //Draw the horizontal lines
@@ -66,7 +66,7 @@ public class Viewer extends Application {
         }
     }
 
-    void drawVertical(){
+    static void drawVertical(){
         int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
         int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
         //Draw the vertical lines
@@ -83,7 +83,7 @@ public class Viewer extends Application {
         }
     }
 
-    void drawBoard() {
+    static void drawBoard() {
         drawHorizontal();
         drawVertical();
     }
