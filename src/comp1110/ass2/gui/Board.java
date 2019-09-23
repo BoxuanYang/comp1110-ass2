@@ -14,58 +14,10 @@ public class Board extends Application {
 
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
-    private static final int SQUARE_SIZE = 60;
-    private static final int VIEWER_WIDTH = 720;
-    private static final int VIEWER_HEIGHT = 480;
-
-    private static final int COLUMNS = 9;
-    private static final int ROWS = 5;
-
-    private static final String URI_BASE = "assets/";
 
     // node groups
     private final Group root = new Group();
-
-    /*void drawHorizontal(){
-        int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
-        int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
-        //Draw the horizontal lines
-        for(int i = 0; i < 6; i++){
-            //Last line should be of length 7 SQUARE_SIZE
-            if(i == 5){
-                Line horizontal = new Line(initialX + SQUARE_SIZE, initialY + 5 * SQUARE_SIZE, initialX + SQUARE_SIZE * 8, initialY + 5 * SQUARE_SIZE);
-                controls.getChildren().add(horizontal);
-                continue;
-            }
-            Line horizontal = new Line(initialX, initialY + i * SQUARE_SIZE, initialX + SQUARE_SIZE * COLUMNS, initialY + i * SQUARE_SIZE);
-            controls.getChildren().add(horizontal);
-        }
-    }
-
-    void drawVertical(){
-        int initialX = (VIEWER_WIDTH - SQUARE_SIZE * COLUMNS) / 2;
-        int initialY = (VIEWER_HEIGHT - SQUARE_SIZE * ROWS) / 2;
-        //Draw the vertical lines
-        for(int i = 0; i < 10; i++){
-            //First and Last vertical line should be of length SQUARE_SIZE * 4
-            if(i == 0 || i == 9){
-                Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 4 * SQUARE_SIZE);
-                controls.getChildren().add(vertical);
-                continue;
-            }
-
-            Line vertical = new Line(initialX + i * SQUARE_SIZE, initialY, initialX + i * SQUARE_SIZE, initialY + 5 * SQUARE_SIZE);
-            controls.getChildren().add(vertical);
-        }
-    }
-
-    void drawBoard() {
-        drawHorizontal();
-        drawVertical();
-    }
-*/
-
-
+    
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
