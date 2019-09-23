@@ -3,7 +3,6 @@ package comp1110.ass2.gui;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import static comp1110.ass2.gui.Viewer.*;
 
@@ -12,12 +11,21 @@ public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Focus Game in JavaFX that only allows pieces to be placed in valid places
 
+    // window layout
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
 
+    // playable board layout
+    private static final int PLAY_WIDTH = 540;
+    private static final int PLAY_HEIGHT = 300;
+
+    // playable board position
+    private static final int PLAY_X = BOARD_WIDTH/2 - PLAY_WIDTH/2;
+    private static final int MARGIN = 10;
+
     // node groups
     private final Group root = new Group();
-    
+
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
@@ -81,7 +89,7 @@ public class Board extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Board");
         // draw board
-        drawBoard();
+        drawBoard(PLAY_X,MARGIN);
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
         root.getChildren().add(controls);
