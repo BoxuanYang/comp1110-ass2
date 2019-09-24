@@ -1,11 +1,18 @@
 package comp1110.ass2.gui;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static comp1110.ass2.gui.Viewer.*;
@@ -34,13 +41,18 @@ public class Board extends Application {
 
     // placement containing all pieces on board
     private String placement = "";
-    // temporary pieces
-    private String tmp = "";
+    // temporary placement
+    private String placementtmp = "";
     // column for placement string
     private int col;
     // row for placement string
     private int row;
+    // x location on board
+    private int bx;
+    // y location on board
+    private int by;
 
+    private TextField textField;
 
     // node groups
     private final Group root = new Group();
@@ -197,17 +209,40 @@ public class Board extends Application {
             if (onBoard()) {
                 for (int x = 0; x < 9; x++) {
                     if (getLayoutX() >= PLAY_X + (SQUARE_SIZE * x) && getLayoutX() < (PLAY_X + (SQUARE_SIZE * (x + 1)))) {
-                        setLayoutX(PLAY_X + (SQUARE_SIZE * x));
+                        col = x;
+                        bx = (PLAY_X + (SQUARE_SIZE * x));
                     }
                 }
+                // find nearest y grid or snap to home if not on board
                 for (int y = 0; y < 5; y++) {
                     if (getLayoutY() >= MARGIN_Y + (SQUARE_SIZE * y) && getLayoutY() < (MARGIN_Y + (SQUARE_SIZE * (y + 1)))) {
-                        setLayoutY(MARGIN_Y + (SQUARE_SIZE * y));
+                        row = y;
+                        by = (MARGIN_Y + (SQUARE_SIZE * y));
                     }
                 }
             } else {
                 snapToHome();
             }
+
+            placementtmp=placement;
+            // find index of piece character in placement (containing all pieces on the board)
+            int p = placementtmp.indexOf(piece);
+            int length = placementtmp.length();
+
+            // if piece being snapped is already on the board, remove it from the placement string of existing pieces
+            if (p != -1) {
+                placementtmp = placement.substring(0,p) + placement.substring(p+4,length);
+            }
+
+            String tmp = Character.toString(piece) + col + row + orientation + "";
+            if (isPlacementStringValid(placementtmp + tmp)) {
+                setLayoutX(bx);
+                setLayoutY(by);
+                placement = placementtmp + tmp;
+            } else {
+                snapToHome();
+            }
+
         }
             /**
              * Checks to see if piece is on the board
@@ -256,7 +291,6 @@ public class Board extends Application {
 
 }
 
-
     /** place all tiles in their starting positions */
     private void makeTiles() {
         bpieces.getChildren().clear();
@@ -264,6 +298,32 @@ public class Board extends Application {
             bpieces.getChildren().add(new DraggablePiece(m));
         }
     }
+
+    /** Create a button to reset all pieces back to original place */
+    private void resetButton() {
+        Button button = new Button("Reset");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            resetPieces();
+            }
+        });
+        controls.getChildren().add(button);
+        button.setLayoutX(MARGIN_X);
+        button.setLayoutY(MARGIN_Y);
+    }
+
+    /** reset all pieces */
+    private void resetPieces() {
+        // snap each piece back to home
+        bpieces.toFront();
+        for (Node n : bpieces.getChildren()) {
+            ((DraggablePiece) n).snapToHome();
+        }
+        // empty the placement string
+        placement = "";
+    }
+
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
@@ -332,6 +392,8 @@ public class Board extends Application {
         drawBoard(PLAY_X,MARGIN_Y);
         // place all pieces on board
         makeTiles();
+        // create reset button
+        resetButton();
 
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
         root.getChildren().add(controls);
