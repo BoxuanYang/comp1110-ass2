@@ -5,14 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static comp1110.ass2.gui.Viewer.*;
@@ -41,8 +39,6 @@ public class Board extends Application {
 
     // placement containing all pieces on board
     private String placement = "";
-    // temporary placement
-    private String placementtmp = "";
     // column for placement string
     private int col;
     // row for placement string
@@ -224,7 +220,7 @@ public class Board extends Application {
                 snapToHome();
             }
 
-            placementtmp=placement;
+            String placementtmp=placement;
             // find index of piece character in placement (containing all pieces on the board)
             int p = placementtmp.indexOf(piece);
             int length = placementtmp.length();
@@ -266,19 +262,6 @@ public class Board extends Application {
                 }
                 return true;
             }
-/*
-            Viewer view = new Viewer();
-
-            tmp = piece + col + row + orientation + "";
-            if (isPlacementStringValid(tmp)) {
-                view.makePlacement(tmp);
-                placement = placement + tmp;
-            }
-*/
-
-            // create a placement of the piece
-
-            // add placement to placements on board
 
     /**
      * Snap tile back to home position (if not on the grid
