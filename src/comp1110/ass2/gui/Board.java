@@ -1,16 +1,15 @@
 package comp1110.ass2.gui;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static comp1110.ass2.gui.Viewer.*;
+import static comp1110.ass2.FocusGame.*;
 
 
 public class Board extends Application {
@@ -25,13 +24,22 @@ public class Board extends Application {
     private static final int SQUARE_SIZE = 60;
 
     // playable board position
-    private static final double MARGIN_X = 42.6;
-    private static final double MARGIN_Y = 45;
-    private static final double PLAY_X = MARGIN_X*2 + 4*SQUARE_SIZE;
+    private static final int MARGIN_X = 43;
+    private static final int MARGIN_Y = 45;
+    private static final int PLAY_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
 
 
     private static final String URI_BASE = "assets/";
     private static final int ASCII = 97;
+
+    // placement containing all pieces on board
+    private String placement = "";
+    // temporary pieces
+    private String tmp = "";
+    // column for placement string
+    private int col;
+    // row for placement string
+    private int row;
 
 
     // node groups
@@ -41,7 +49,7 @@ public class Board extends Application {
     // creates shadow effect on piece
     private static DropShadow dropShadow;
 
-    /* Static initializer to initialize dropShadow */ {
+    /** Static initializer to initialize dropShadow */ {
         dropShadow = new DropShadow();
         dropShadow.setOffsetX(2.0);
         dropShadow.setOffsetY(2.0);
@@ -49,29 +57,43 @@ public class Board extends Application {
     }
 
 
-    // returns y location for a piece in a given row
-    private double rowPosition(int row) {
-        return MARGIN_Y*row + SQUARE_SIZE*(2*(row-1));
+    /**
+     * returns y location for a piece in a given row
+     */
+    private int rowPosition(int row) {
+        return MARGIN_Y * row + SQUARE_SIZE * (2 * (row - 1));
     }
 
-    // returns x location for each piece in a given column
-    private double colPosition(int col) {
-        double margins = MARGIN_X*col;
-        switch(col) {
-            case 1: return margins;
-            case 2: return margins+3*SQUARE_SIZE;
-            case 3: return margins+7*SQUARE_SIZE;
-            case 4: return margins+9*SQUARE_SIZE;
+    /**
+     * returns x location for each piece in a given column
+     */
+    private int colPosition(int col) {
+        int margins = MARGIN_X * col;
+        switch (col) {
+            case 1:
+                return margins;
+            case 2:
+                return margins + 3 * SQUARE_SIZE;
+            case 3:
+                return margins + 7 * SQUARE_SIZE;
+            case 4:
+                return margins + 9 * SQUARE_SIZE;
         }
         return margins;
     }
 
-    // the row location of each piece where index 0 is a, 1 is b, etc.
-    int[] rows = {3,3,1,4,4,4,4,3,3,2};
-    // the column location of each piece where index 0 is a, 1 is b, etc.
-    int[] cols = {1,2,1,3,1,4,2,4,3,1};
+    /**
+     * the row location of each piece where index 0 is a, 1 is b, etc.
+     **/
+    int[] rows = {3, 3, 1, 4, 4, 4, 4, 3, 3, 2};
+    /**
+     * the column location of each piece where index 0 is a, 1 is b, etc.
+     **/
+    int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
 
-    // Graphical representation of the pieces
+    /**
+     * Graphical representation of the pieces
+     */
     class BoardPiece extends ImageView {
         int pieceID;
 
@@ -79,10 +101,10 @@ public class Board extends Application {
          * Construct a particular playing piece that is placed on the board at the start
          * of the game
          *
-         * @param piece The letter representing the piece to be created.
+         * @param piece       The letter representing the piece to be created.
          * @param orientation The piece rotation
          */
-        BoardPiece(char piece,int orientation) {
+        BoardPiece(char piece, int orientation) {
             if (piece > 'j' || piece < 'a') {
                 throw new IllegalArgumentException("Bad tile: \"" + piece + "\"");
             }
@@ -94,85 +116,154 @@ public class Board extends Application {
          */
         BoardPiece() {
             // build each piece
-            for (int i=0; i<10;i++) {
-                BoardPiece pieces = new BoardPiece((char)('a'+i),0);
+            for (int i = 0; i < 10; i++) {
+                BoardPiece pieces = new BoardPiece((char) ('a' + i), 0);
                 root.getChildren().add(pieces);
             }
         }
     }
 
-class DraggablePiece extends BoardPiece {
+    /**
+     * class extending piece with the ability to be dragged and dropped and snapped onto the board
+     **/
+    class DraggablePiece extends BoardPiece {
         double X, Y; // position where tile initially begins
         double mouseX, mouseY; // last known mouse positions
         int orientation; // piece orientation
 
-    DraggablePiece(char piece) {
-        // creates image of piece
-        setImage(new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString()));
+        /**
+         * Constructs a draggable piece
+         **/
+        DraggablePiece(char piece) {
+            // creates image of piece
+            setImage(new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString()));
 
-        // initial piece orientation
-        orientation = 0;
+            // initial piece orientation
+            orientation = 0;
 
-        // Sets the initial position of the piece
-        X = colPosition(cols[piece-'a']);
-        Y = rowPosition(rows[piece-'a']);
+            // Sets the initial position of the piece
+            X = colPosition(cols[piece - 'a']);
+            Y = rowPosition(rows[piece - 'a']);
 
-        // shift piece d and f separately (does not follow pattern)
-        if (piece == 'd') {
-            X=X-SQUARE_SIZE;
+            // shift piece d and f separately (does not follow pattern)
+            if (piece == 'd') {
+                X = X - SQUARE_SIZE;
+            }
+            if (piece == 'f') {
+                Y = Y + SQUARE_SIZE;
+            }
+            setLayoutX(X);
+            setLayoutY(Y);
+
+            // Sets the piece to the correct size
+            int width = getSquaresOfWidth(piece, orientation);
+            int height = getSquaresOfHeight(piece, orientation);
+            setFitWidth(SQUARE_SIZE * width);
+            setFitHeight(SQUARE_SIZE * height);
+
+            // gives shadow effect
+            setEffect(dropShadow);
+
+            /* event handlers */
+
+            // find points of mouse at beginning of drag
+            setOnMousePressed(event -> {
+                mouseX = event.getSceneX();
+                mouseY = event.getSceneY();
+            });
+            // track mouse movement as it is being dragged
+            setOnMouseDragged(event -> {
+                toFront();
+                double movementX = event.getSceneX() - mouseX;
+                double movementY = event.getSceneY() - mouseY;
+                setLayoutX(getLayoutX() + movementX);
+                setLayoutY(getLayoutY() + movementY);
+                mouseX = event.getSceneX();
+                mouseY = event.getSceneY();
+                event.consume();
+            });
+            // snap into place upon completed drag
+            setOnMouseReleased(event -> {
+                snapToGrid(piece);
+            });
+
         }
-        if (piece == 'f') {
-            Y=Y+SQUARE_SIZE;
+
+        /**
+         * Snap piece to the nearest grid position
+         */
+        private void snapToGrid(char piece) {
+            // find nearest x grid or snap to home if not on board
+            if (onBoard()) {
+                for (int x = 0; x < 9; x++) {
+                    if (getLayoutX() >= PLAY_X + (SQUARE_SIZE * x) && getLayoutX() < (PLAY_X + (SQUARE_SIZE * (x + 1)))) {
+                        setLayoutX(PLAY_X + (SQUARE_SIZE * x));
+                    }
+                }
+                for (int y = 0; y < 5; y++) {
+                    if (getLayoutY() >= MARGIN_Y + (SQUARE_SIZE * y) && getLayoutY() < (MARGIN_Y + (SQUARE_SIZE * (y + 1)))) {
+                        setLayoutY(MARGIN_Y + (SQUARE_SIZE * y));
+                    }
+                }
+            } else {
+                snapToHome();
+            }
         }
+            /**
+             * Checks to see if piece is on the board
+             */
+            private boolean onBoard() {
+                // check if it is in the correct x location to be on board
+                if(!(getLayoutX() >= PLAY_X && getLayoutX() < (BOARD_WIDTH-MARGIN_X))) {
+                    return false;
+                }
+                // check if it is in the correct y location to be on board
+                if(!(getLayoutY() >= MARGIN_Y && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5))) {
+                    return false;
+                }
+                // check it is not in the bottom left corner
+                if(getLayoutX() >= PLAY_X && getLayoutX() < PLAY_X+SQUARE_SIZE && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5)) {
+                    return false;
+                }
+                // check it is not in the bottom right corner
+                if(getLayoutX() >= PLAY_X+SQUARE_SIZE*8 && getLayoutX() < BOARD_WIDTH- MARGIN_X && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5)) {
+                    return false;
+                }
+                return true;
+            }
+/*
+            Viewer view = new Viewer();
+
+            tmp = piece + col + row + orientation + "";
+            if (isPlacementStringValid(tmp)) {
+                view.makePlacement(tmp);
+                placement = placement + tmp;
+            }
+*/
+
+            // create a placement of the piece
+
+            // add placement to placements on board
+
+    /**
+     * Snap tile back to home position (if not on the grid
+     **/
+    private void snapToHome() {
         setLayoutX(X);
         setLayoutY(Y);
-
-        // Sets the piece to the correct size
-        int width = getSquaresOfWidth(piece, orientation);
-        int height = getSquaresOfHeight(piece, orientation);
-        setFitWidth(SQUARE_SIZE * width);
-        setFitHeight(SQUARE_SIZE * height);
-
-        // gives shadow effect
-        setEffect(dropShadow);
-
-        /* event handlers */
-
-        // find points of mouse at beginning of drag
-        setOnMousePressed(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-        });
-        // track mouse movement as it is being dragged
-        setOnMouseDragged(event -> {
-            toFront();
-            double movementX = event.getSceneX() - mouseX;
-            double movementY = event.getSceneY() - mouseY;
-            setLayoutX(getLayoutX() + movementX);
-            setLayoutY(getLayoutY() + movementY);
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-            event.consume();
-        });
-        // snap into place upon completed drag
-        setOnMouseReleased(event -> {
-            // snapToGrid();
-        });
-
-    }
+        orientation = 0;
     }
 
-    // place all tiles in their starting positions
+}
+
+
+    /** place all tiles in their starting positions */
     private void makeTiles() {
         bpieces.getChildren().clear();
         for (char m = 'a'; m <= 'j'; m++) {
             bpieces.getChildren().add(new DraggablePiece(m));
         }
     }
-
-
-
-
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
