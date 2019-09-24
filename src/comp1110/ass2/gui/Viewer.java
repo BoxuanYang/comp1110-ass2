@@ -40,7 +40,7 @@ public class Viewer extends Application {
     private final Group root = new Group();
     public static Group controls = new Group();
     private TextField textField;
-    int[][] width_and_height = {
+    static int[][] width_and_height = {
             {3, 2},//a
             {4, 2},//b
             {4, 2},//c
@@ -53,7 +53,7 @@ public class Viewer extends Application {
             {4, 2}//j
     };
 
-    static void drawHorizontal(int x, int y){
+    static void drawHorizontal(double x, double y){
         //Draw the horizontal lines
         for(int i = 0; i < 6; i++){
             //Last line should be of length 7 SQUARE_SIZE
@@ -67,7 +67,7 @@ public class Viewer extends Application {
         }
     }
 
-    static void drawVertical(int x, int y){
+    static void drawVertical(double x, double y){
         //Draw the vertical lines
         for(int i = 0; i < 10; i++){
             //First and Last vertical line should be of length SQUARE_SIZE * 4
@@ -82,7 +82,7 @@ public class Viewer extends Application {
         }
     }
 
-    static void drawBoard(int x, int y) {
+    static void drawBoard(double x, double y) {
         drawHorizontal(x,y);
         drawVertical(x,y);
     }
@@ -149,12 +149,12 @@ public class Viewer extends Application {
 
     }
 
-    public int getSquaresOfWidth(char piece, int orientation){
+    public static int getSquaresOfWidth(char piece, int orientation){
         int pieceIndex = piece - 97;
         return width_and_height[pieceIndex][0];
     }
 
-    public int getSquaresOfHeight(char piece, int orientation){
+    public static int getSquaresOfHeight(char piece, int orientation){
         int pieceIndex = piece - 97;
         return width_and_height[pieceIndex][1];
     }
