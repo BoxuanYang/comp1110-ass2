@@ -144,6 +144,7 @@ public class Board extends Application {
          **/
         DraggablePiece(char piece) {
             // creates image of piece
+
             setImage(new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString()));
 
             // initial piece orientation
