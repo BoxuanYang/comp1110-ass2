@@ -32,11 +32,11 @@ declaration: >-
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
-code: Board class code
-        - comment: a lot of the methods in Board class was inspired by or taken from comp1110 assignment 1.
+code: 
+- comment: a lot of the methods in Board class was inspired by or taken from comp1110 assignment 1.
         The DraggablePiece class was partially copied from DraggableTile in the Game class of comp1110 assignment 1.
         url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1
-  #  licence:
+    licence:...
 
   # Use this to list any assets (artwork, sound, etc) that you used.
   # Provide a comment explaining your use of that asset and the URL
