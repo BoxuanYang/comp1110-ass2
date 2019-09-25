@@ -13,17 +13,15 @@ declaration: >-
   I declare that everything I have submitted for stage D of this assignment
   and all stages before it is entirely my own work, with the following
   exceptions:
-  Everything contained in Task 6 was made on our own and we did not use ideas from anyone.
-  However, in TASK 7 we got some inspirations from assignment 1.
 
-  # Use this to list names of people who you collaborated with, and a
-  # comment about what you collaborated on.
-  #
-  # Add as many "name+comment" entries as necessary
-  # (or remove it altogether if you haven't collaborated with anyone)
-  #collaboration:
-  #- name:
-#  comment: >-
+# Use this to list names of people who you collaborated with, and a
+# comment about what you collaborated on.
+#
+# Add as many "name+comment" entries as necessary
+# (or remove it altogether if you haven't collaborated with anyone)
+#collaboration:
+#  - name:
+#    comment: >-
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -32,22 +30,21 @@ declaration: >-
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
-code: Board class code
-        - comment: a lot of the methods in Board class was inspired by or taken from comp1110 assignment 1.
-        The DraggablePiece class was partially copied from DraggableTile in the Game class of comp1110 assignment 1.
-        url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1
-  #  licence:
+#code:
+  - comment: a lot of the methods in Board class was inspired by or taken from comp1110 assignment 1. The DraggablePiece class was partially copied from DraggableTile in the Game class of comp1110 assignment 1.
+    url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1
+#    licence:
 
-  # Use this to list any assets (artwork, sound, etc) that you used.
-  # Provide a comment explaining your use of that asset and the URL
-  # and license for the asset
-  #
-  # Add as many "url+licence+comment" entries as necessary
-  # (or remove it altogether if you haven't used any external assets)
-  # assets:
-  #- comment:
-  #  url:
-  #  licence:
+# Use this to list any assets (artwork, sound, etc) that you used.
+# Provide a comment explaining your use of that asset and the URL
+# and license for the asset
+#
+# Add as many "url+licence+comment" entries as necessary
+# (or remove it altogether if you haven't used any external assets)
+#assets:
+#  - comment:
+#    url:
+#    licence:
 
 
 # sign *your* name and uid here
