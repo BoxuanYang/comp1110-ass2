@@ -275,6 +275,7 @@ public class FocusGame {
     }
 
     /**
+     * The author of this method is Nicole Wang
      * Determine whether a placement string is well-formed:
      * - it consists of exactly N four-character piece placements (where N = 1 .. 10);
      * - each piece placement is well-formed

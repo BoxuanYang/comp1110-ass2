@@ -66,6 +66,7 @@ public class Board extends Application {
 
 
     /**
+     * The author of this method is Nicole Wang
      * returns y location for a piece in a given row
      */
     private int rowPosition(int row) {
@@ -73,6 +74,7 @@ public class Board extends Application {
     }
 
     /**
+     * The author of this method is Nicole Wang
      * returns x location for each piece in a given column
      */
     private int colPosition(int col) {
@@ -100,12 +102,15 @@ public class Board extends Application {
     int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
 
     /**
+     * The author of this class is Nicole Wang
+     * Inspiration from comp1110 assignment 1
      * Graphical representation of the pieces
      */
     class BoardPiece extends ImageView {
         int pieceID;
 
         /**
+         * This method was taken from comp1110 assignment 1
          * Construct a particular playing piece that is placed on the board at the start
          * of the game
          *
@@ -120,6 +125,7 @@ public class Board extends Application {
         }
 
         /**
+         * The author of this method is Nicole Wang
          * Build the pieces on the board
          */
         BoardPiece() {
@@ -132,6 +138,7 @@ public class Board extends Application {
     }
 
     /**
+     * Inspiration for this class was taken from comp1110 Assignment 1 and lab 6
      * class extending piece with the ability to be dragged and dropped and snapped onto the board
      **/
     class DraggablePiece extends BoardPiece {
@@ -140,6 +147,7 @@ public class Board extends Application {
         int orientation; // piece orientation
 
         /**
+         * The author of this method is Nicole Wang
          * Constructs a draggable piece
          **/
         DraggablePiece(char piece) {
@@ -199,6 +207,7 @@ public class Board extends Application {
         }
 
         /**
+         * The author of this method is Nicole Wang
          * Snap piece to the nearest grid position
          */
         private void snapToGrid(char piece) {
@@ -242,6 +251,7 @@ public class Board extends Application {
 
         }
             /**
+             * The author of this method is Nicole Wang
              * Checks to see if piece is on the board
              */
             private boolean onBoard() {
@@ -265,6 +275,7 @@ public class Board extends Application {
             }
 
     /**
+     * The author of this method is Nicole Wang
      * Snap tile back to home position (if not on the grid
      **/
     private void snapToHome() {
@@ -275,7 +286,9 @@ public class Board extends Application {
 
 }
 
-    /** place all tiles in their starting positions */
+    /**
+     * The author of this method is Nicole Wang
+     * place all tiles in their starting positions */
     private void makeTiles() {
         bpieces.getChildren().clear();
         for (char m = 'a'; m <= 'j'; m++) {
@@ -283,7 +296,8 @@ public class Board extends Application {
         }
     }
 
-    /** Create a button to reset all pieces back to original place */
+    /** The author of this method is Nicole Wang
+     * Create a button to reset all pieces back to original place */
     private void resetButton() {
         Button button = new Button("Reset");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -297,7 +311,8 @@ public class Board extends Application {
         button.setLayoutY(MARGIN_Y);
     }
 
-    /** reset all pieces */
+    /** The author of this method is Nicole Wang
+     * reset all pieces */
     private void resetPieces() {
         // snap each piece back to home
         bpieces.toFront();
@@ -366,6 +381,7 @@ public class Board extends Application {
     }
 
     /**
+     * The author of this method is Nicole Wang
      * Snap the tile to its home position (if it is not on the grid)
      */
 
