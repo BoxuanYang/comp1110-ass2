@@ -11,10 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static comp1110.ass2.Solution.SOLUTIONS;
@@ -219,6 +219,7 @@ public class Board extends Application {
             setOnScroll(event -> {            // scroll to change orientation
                 if (System.currentTimeMillis() - lastRotationTime > ROTATION_THRESHOLD){
                             lastRotationTime = System.currentTimeMillis();
+                            orientation = (orientation + 1) % 4;
                             rotate();
                             event.consume();
                         }});
@@ -226,18 +227,15 @@ public class Board extends Application {
         }
 
         /** The author of this method is Nicole Wang
-         * This method rotates the image of the piec e
+         * This method rotates the image of the piece
          */
         private void rotate() {
-            orientation = (orientation + 1) %4;
-            ImageView iv1 = new ImageView();
-            iv1.setImage(img);
-            iv1.setRotate(90);
-            img = iv1.getImage();
-            setImage(img);
             setFitWidth(getSquaresOfWidth(piece, orientation)*SQUARE_SIZE);
             setFitHeight(getSquaresOfHeight(piece, orientation)*SQUARE_SIZE);
             toFront();
+            // turn piece character into corresponding arraylist (pieces) index
+            int p = piece - 97;
+            pieces.get(p).setRotate(orientation*90);
         }
 
         /**
@@ -343,11 +341,14 @@ public class Board extends Application {
     /**
      * The author of this method is Nicole Wang
      * place all tiles in their starting positions */
+    ArrayList<DraggablePiece> pieces = new ArrayList<>();
     private void makeTiles() {
         bpieces.getChildren().clear();
         for (char m = 'a'; m <= 'j'; m++) {
-            bpieces.getChildren().add(new DraggablePiece(m));
+            pieces.add(new DraggablePiece(m));
+            bpieces.getChildren().add(pieces.get(m-97));
         }
+
     }
 
     /** The author of this method is Nicole Wang
