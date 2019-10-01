@@ -41,6 +41,9 @@ public class Board extends Application {
     private static final int BOARD_END_X = BOARD_WIDTH-MARGIN_X;
     private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE*5;
 
+    long lastRotationTime = System.currentTimeMillis();
+    private static final long ROTATION_THRESHOLD = 50; // allow rotation every 50 milliseconds
+
 
     private static final String URI_BASE = "assets/";
 
@@ -160,8 +163,7 @@ public class Board extends Application {
         DraggablePiece(char piece) {
             this.piece = piece;
             // creates image of piece
-            Image i = new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString());
-            img = i;
+            img = new Image(Board.class.getResource(URI_BASE + piece + ".png").toString());
             setImage(img);
 
             // initial piece orientation
@@ -213,50 +215,34 @@ public class Board extends Application {
                 snapToGrid(piece);
             });
 
-            // rotate accordingly when arrow keys are pressed
-            setOnKeyTyped(event -> {
-            KeyCode k = event.getCode();
-            if (k == KeyCode.RIGHT) {
-                orientation = 1;
-                rotate();
-                event.consume();
-            }
-            if (k == KeyCode.UP) {
-                orientation = 0;
-                rotate();
-                event.consume();
-            }
-            if (k == KeyCode.LEFT) {
-                orientation = 3;
-                rotate();
-                event.consume();
-            }
-            if (k == KeyCode.DOWN) {
-                orientation = 2;
-                rotate();
-                event.consume();
-            }
-        });
+            /* event handlers */
+            setOnScroll(event -> {            // scroll to change orientation
+                if (System.currentTimeMillis() - lastRotationTime > ROTATION_THRESHOLD){
+                            lastRotationTime = System.currentTimeMillis();
+                            rotate();
+                            event.consume();
+                        }});
 
         }
 
         /** The author of this method is Nicole Wang
-         * This method rotates the image of the piece
+         * This method rotates the image of the piec e
          */
         private void rotate() {
+            orientation = (orientation + 1) %4;
             ImageView iv1 = new ImageView();
             iv1.setImage(img);
-            iv1.setRotate(orientation * 90);
+            iv1.setRotate(90);
             img = iv1.getImage();
             setImage(img);
-            setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
-            setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+            setFitWidth(getSquaresOfWidth(piece, orientation)*SQUARE_SIZE);
+            setFitHeight(getSquaresOfHeight(piece, orientation)*SQUARE_SIZE);
             toFront();
         }
 
         /**
          * Authored by Nicole Wang
-         * Find closest column
+         * Find closest column to the current piece
          */
         private int closestColumn(){
             return (int)(Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
@@ -265,7 +251,7 @@ public class Board extends Application {
 
         /**
          * Authored by Nicole Wang
-         * Find closest row
+         * Find closest row to the current piece
          */
         private int closestRow(){
             return (int)(Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
@@ -319,19 +305,19 @@ public class Board extends Application {
              */
             private boolean onBoard() {
                 // check if it is in the correct x location to be on board
-                if(!(getLayoutX() >= BOARD_START_X && getLayoutX() < (BOARD_END_X))) {
+                if(!(mouseX >= BOARD_START_X && mouseX < (BOARD_END_X))) {
                     return false;
                 }
                 // check if it is in the correct y location to be on board
-                if(!(getLayoutY() >= MARGIN_Y && getLayoutY() < (BOARD_END_Y))) {
+                if(!(mouseY >= MARGIN_Y && mouseY < (BOARD_END_Y))) {
                     return false;
                 }
                 // check it is not in the bottom left corner
-                if(getLayoutX() >= BOARD_START_X && getLayoutX() < BOARD_START_X+SQUARE_SIZE && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (BOARD_END_Y)) {
+                if(mouseX >= BOARD_START_X && mouseX < BOARD_START_X+SQUARE_SIZE && mouseY >= MARGIN_Y+SQUARE_SIZE*4 && mouseY < (BOARD_END_Y)) {
                     return false;
                 }
                 // check it is not in the bottom right corner
-                if(getLayoutX() >= BOARD_START_X+SQUARE_SIZE*8 && getLayoutX() < BOARD_END_X && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (BOARD_END_Y)) {
+                if(mouseY >= BOARD_START_X+SQUARE_SIZE*8 && mouseY < BOARD_END_X && mouseY >= MARGIN_Y+SQUARE_SIZE*4 && mouseY < (BOARD_END_Y)) {
                     return false;
                 }
                 return true;
@@ -345,6 +331,11 @@ public class Board extends Application {
         setLayoutX(X);
         setLayoutY(Y);
         orientation = 0;
+        int p = placement.indexOf(piece);
+        // if piece being snapped is already on the board, remove it from the placement string of existing pieces
+        if (p != -1) {
+            placement = placement.substring(0,p) + placement.substring(p+4);
+        }
     }
 
 }
@@ -400,7 +391,7 @@ public class Board extends Application {
     public void placeStart(String objective) {
         for(int i = 0; i < objective.length(); i++){
             char piece = Character.toLowerCase(objective.charAt(i));
-            Image image = new Image(Board.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
+            Image image = new Image(Viewer.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
             ImageView iv1 = new ImageView();
             iv1.setImage((image));
             root.getChildren().add(iv1);
