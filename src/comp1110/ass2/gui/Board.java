@@ -209,12 +209,11 @@ public class Board extends Application {
             setOnMouseReleased(event -> {
                 snapToGrid(piece);
             });
-            
+
+            // rotate accordingly when arrow keys are pressed
             setOnKeyTyped(event -> {
             KeyCode k = event.getCode();
             if (k == KeyCode.RIGHT) {
-                setLayoutX(100);
-                setLayoutY(100);
                 orientation = 1;
                 rotate();
                 event.consume();
@@ -252,9 +251,25 @@ public class Board extends Application {
             toFront();
         }
 
+        /**
+         * Authored by Nicole Wang
+         * Find closest column
+         */
+        private int closestColumn(int y){
+           /* return mouseX PLAY_X
+            if(mouseX == (BOARD_WIDTH-MARGIN_X)
+            BOARD_WIDTH-MARGIN_X
+            */
+                    return 0;
+        }
 
-
-
+        /**
+         * Authored by Nicole Wang
+         * Find closest row
+         */
+        private int closestRow(int x){
+            return 0;
+        }
 
         /**
          * The author of this method is Nicole Wang
@@ -264,7 +279,7 @@ public class Board extends Application {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
                 for (int x = 0; x < 9; x++) {
-                    if (getLayoutX() >= PLAY_X + (SQUARE_SIZE * x) && getLayoutX() < (PLAY_X + (SQUARE_SIZE * (x + 1)))) {
+                    if (getLayoutX() >= PLAY_X + (SQUARE_SIZE * x) && getLayoutX() <= (PLAY_X + (SQUARE_SIZE * (x + 1)))) {
                         col = x;
                         bx = (PLAY_X + (SQUARE_SIZE * x));
                     }
