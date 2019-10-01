@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.Solution;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +13,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.Random;
+
+import static comp1110.ass2.Solution.SOLUTIONS;
 import static comp1110.ass2.gui.Viewer.*;
 import static comp1110.ass2.FocusGame.*;
 
@@ -201,7 +206,7 @@ public class Board extends Application {
             setOnMouseReleased(event -> {
                 snapToGrid(piece);
             });
-            
+            /*
             setOnKeyPressed(ke -> {
             KeyCode key = ke.getCode();
             if (key.equals(KeyCode.RIGHT)) {
@@ -238,7 +243,7 @@ public class Board extends Application {
             }
         });
             
-            
+            */
 
         }
 
@@ -370,16 +375,33 @@ public class Board extends Application {
 
     // TASK 8: get a starting placement from SOLUTIONS in TestUtility.Solution
     public String startPlacement() {
-        return "";
+        Random random = new Random();
+        int index = random.nextInt(120);
+        return SOLUTIONS[index].objective;
     }
 
     // TASK 8: add the startPlacement to the board
-    public void placeStart() {
+    public void placeStart(String objective) {
+        for(int i = 0; i < objective.length(); i++){
+            char piece = Character.toLowerCase(objective.charAt(i));
+            Image image = new Image(Viewer.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
+            ImageView iv1 = new ImageView();
+            iv1.setImage((image));
+            root.getChildren().add(iv1);
+        }
     }
 
+
     // TASK 8: return a solution for the game
-    public String gameSolution() {
-        return "";
+    public String gameSolution(String objective) {
+        Solution solution = SOLUTIONS[0];
+        for(int i = 0; i < 120; i++){
+            solution = SOLUTIONS[i];
+            if(solution.objective.equals(objective))
+                return solution.getPlacement();
+
+        }
+        return solution.getPlacement();
     }
 
 
