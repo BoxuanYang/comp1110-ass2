@@ -259,7 +259,7 @@ public class Board extends Application {
          * Find closest column
          */
         private int closestColumn(){
-            return (int)(Math.round((mouseX - BOARD_START_X) / SQUARE_SIZE));
+            return (int)(Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
 
         }
 
@@ -268,7 +268,7 @@ public class Board extends Application {
          * Find closest row
          */
         private int closestRow(){
-            return (int)(Math.round((mouseY - MARGIN_Y) / SQUARE_SIZE));
+            return (int)(Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
         }
 
         /**
@@ -278,19 +278,11 @@ public class Board extends Application {
         private void snapToGrid(char piece) {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
-                for (int x = 0; x < 9; x++) {
-                    if (getLayoutX() >= BOARD_START_X + (SQUARE_SIZE * x) && getLayoutX() <= (BOARD_START_X + (SQUARE_SIZE * (x + 1)))) {
-                        col = closestColumn();
-                        bx = (BOARD_START_X + (SQUARE_SIZE * col-1));
-                    }
-                }
-                // find nearest y grid or snap to home if not on board
-                for (int y = 0; y < 5; y++) {
-                    if (getLayoutY() >= MARGIN_Y + (SQUARE_SIZE * y) && getLayoutY() < (MARGIN_Y + (SQUARE_SIZE * (y + 1)))) {
-                        row = closestRow();
-                        by = (MARGIN_Y + (SQUARE_SIZE * row));
-                    }
-                }
+                col = closestColumn();
+                bx = (BOARD_START_X + (SQUARE_SIZE * col));
+                row = closestRow();
+                by = (MARGIN_Y + (SQUARE_SIZE * row));
+
             } else {
                 snapToHome();
             }
