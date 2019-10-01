@@ -36,7 +36,10 @@ public class Board extends Application {
     // playable board position
     private static final int MARGIN_X = 43;
     private static final int MARGIN_Y = 45;
-    private static final int PLAY_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
+    
+    private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
+    private static final int BOARD_END_X = BOARD_WIDTH-MARGIN_X;
+    private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE*5;
 
 
     private static final String URI_BASE = "assets/";
@@ -255,20 +258,17 @@ public class Board extends Application {
          * Authored by Nicole Wang
          * Find closest column
          */
-        private int closestColumn(int y){
-           /* return mouseX PLAY_X
-            if(mouseX == (BOARD_WIDTH-MARGIN_X)
-            BOARD_WIDTH-MARGIN_X
-            */
-                    return 0;
+        private int closestColumn(){
+            return (int)(Math.round((mouseX - BOARD_START_X) / SQUARE_SIZE));
+
         }
 
         /**
          * Authored by Nicole Wang
          * Find closest row
          */
-        private int closestRow(int x){
-            return 0;
+        private int closestRow(){
+            return (int)(Math.round((mouseY - MARGIN_Y) / SQUARE_SIZE));
         }
 
         /**
@@ -279,16 +279,16 @@ public class Board extends Application {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
                 for (int x = 0; x < 9; x++) {
-                    if (getLayoutX() >= PLAY_X + (SQUARE_SIZE * x) && getLayoutX() <= (PLAY_X + (SQUARE_SIZE * (x + 1)))) {
-                        col = x;
-                        bx = (PLAY_X + (SQUARE_SIZE * x));
+                    if (getLayoutX() >= BOARD_START_X + (SQUARE_SIZE * x) && getLayoutX() <= (BOARD_START_X + (SQUARE_SIZE * (x + 1)))) {
+                        col = closestColumn();
+                        bx = (BOARD_START_X + (SQUARE_SIZE * col-1));
                     }
                 }
                 // find nearest y grid or snap to home if not on board
                 for (int y = 0; y < 5; y++) {
                     if (getLayoutY() >= MARGIN_Y + (SQUARE_SIZE * y) && getLayoutY() < (MARGIN_Y + (SQUARE_SIZE * (y + 1)))) {
-                        row = y;
-                        by = (MARGIN_Y + (SQUARE_SIZE * y));
+                        row = closestRow();
+                        by = (MARGIN_Y + (SQUARE_SIZE * row));
                     }
                 }
             } else {
@@ -327,19 +327,19 @@ public class Board extends Application {
              */
             private boolean onBoard() {
                 // check if it is in the correct x location to be on board
-                if(!(getLayoutX() >= PLAY_X && getLayoutX() < (BOARD_WIDTH-MARGIN_X))) {
+                if(!(getLayoutX() >= BOARD_START_X && getLayoutX() < (BOARD_END_X))) {
                     return false;
                 }
                 // check if it is in the correct y location to be on board
-                if(!(getLayoutY() >= MARGIN_Y && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5))) {
+                if(!(getLayoutY() >= MARGIN_Y && getLayoutY() < (BOARD_END_Y))) {
                     return false;
                 }
                 // check it is not in the bottom left corner
-                if(getLayoutX() >= PLAY_X && getLayoutX() < PLAY_X+SQUARE_SIZE && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5)) {
+                if(getLayoutX() >= BOARD_START_X && getLayoutX() < BOARD_START_X+SQUARE_SIZE && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (BOARD_END_Y)) {
                     return false;
                 }
                 // check it is not in the bottom right corner
-                if(getLayoutX() >= PLAY_X+SQUARE_SIZE*8 && getLayoutX() < BOARD_WIDTH- MARGIN_X && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (MARGIN_Y + SQUARE_SIZE*5)) {
+                if(getLayoutX() >= BOARD_START_X+SQUARE_SIZE*8 && getLayoutX() < BOARD_END_X && getLayoutY() >= MARGIN_Y+SQUARE_SIZE*4 && getLayoutY() < (BOARD_END_Y)) {
                     return false;
                 }
                 return true;
@@ -477,7 +477,7 @@ public class Board extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Board");
         // draw board
-        drawBoard(PLAY_X,MARGIN_Y);
+        drawBoard(BOARD_START_X,MARGIN_Y);
         // place all pieces on board
         makeTiles();
         // create reset button
