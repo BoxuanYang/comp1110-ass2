@@ -141,6 +141,8 @@ public class Board extends Application {
         double X, Y; // position where tile initially begins
         double mouseX, mouseY; // last known mouse positions
         int orientation; // piece orientation
+        
+        ImageView imageView = new ImageView();
 
         /**
          * The author of this method is Nicole Wang
@@ -199,6 +201,44 @@ public class Board extends Application {
             setOnMouseReleased(event -> {
                 snapToGrid(piece);
             });
+            
+            setOnKeyPressed(ke -> {
+            KeyCode key = ke.getCode();
+            if (key.equals(KeyCode.RIGHT)) {
+                orientation = 1;
+                imageView.setRotate(orientation * 90);
+                bpieces.getChildren().add(imageView);
+                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
+                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+                toFront();
+            }
+            if (key.equals(KeyCode.UP)) {
+                orientation = 0;
+                imageView.setRotate(orientation * 90);
+                bpieces.getChildren().add(imageView);
+                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
+                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+                toFront();
+            }
+            if (key.equals(KeyCode.LEFT)) {
+                orientation = 3;
+                imageView.setRotate(orientation * 90);
+                bpieces.getChildren().add(imageView);
+                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
+                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+                toFront();
+            }
+            if (key.equals(KeyCode.DOWN)) {
+                orientation = 2;
+                imageView.setRotate(orientation * 90);
+                bpieces.getChildren().add(imageView);
+                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
+                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+                toFront();
+            }
+        });
+            
+            
 
         }
 
