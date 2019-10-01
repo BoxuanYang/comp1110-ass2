@@ -322,7 +322,7 @@ public class FocusGame {
 
     /**
      * Determine whether a placement string is valid.
-     * <p>
+     *
      * To be valid, the placement string must be:
      * - well-formed, and
      * - each piece placement must be a valid placement according to the
@@ -516,11 +516,12 @@ public class FocusGame {
         }
         return false;
     }
+
     /**
      * Given a string describing a placement of pieces and a string describing
      * a challenge, return a set of all possible next viable piece placements
      * which cover a specific board location.
-     * <p>
+     *
      * For a piece placement to be viable
      * - it must be valid
      * - it must be consistent with the challenge
@@ -537,8 +538,8 @@ public class FocusGame {
      *                  - 'B' = Blue square
      *                  - 'G' = Green square
      *                  - 'W' = White square
-     * @param col       The position's column.
-     * @param row       The position's row.
+     * @param col      The location's column.
+     * @param row      The location's row.
      * @return A set of viable piece placements, or null if there are none.
      */
     static Set<String> getViablePiecePlacements(String placement, String challenge, int col, int row) {
@@ -603,7 +604,7 @@ public class FocusGame {
      * must:
      * - Order the placement sequence by piece IDs
      * - If a piece exhibits rotational symmetry, only return the lowest
-     * orientation value (0 or 1)
+     *   orientation value (0 or 1)
      *
      * @param challenge A challenge string.
      * @return A placement string describing a canonical encoding of the solution to
