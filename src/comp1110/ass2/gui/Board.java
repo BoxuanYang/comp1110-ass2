@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static comp1110.ass2.gui.Viewer.*;
@@ -141,17 +142,19 @@ public class Board extends Application {
         double X, Y; // position where tile initially begins
         double mouseX, mouseY; // last known mouse positions
         int orientation; // piece orientation
-        
-        ImageView imageView = new ImageView();
+        char piece; // piece type
+        Image img;
 
         /**
          * The author of this method is Nicole Wang
          * Constructs a draggable piece
          **/
         DraggablePiece(char piece) {
+            this.piece = piece;
             // creates image of piece
-
-            setImage(new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString()));
+            Image i = new Image(Viewer.class.getResource(URI_BASE + piece + ".png").toString());
+            img = i;
+            setImage(img);
 
             // initial piece orientation
             orientation = 0;
@@ -202,45 +205,51 @@ public class Board extends Application {
                 snapToGrid(piece);
             });
             
-            setOnKeyPressed(ke -> {
-            KeyCode key = ke.getCode();
-            if (key.equals(KeyCode.RIGHT)) {
+            setOnKeyTyped(event -> {
+            KeyCode k = event.getCode();
+            if (k == KeyCode.RIGHT) {
+                setLayoutX(100);
+                setLayoutY(100);
                 orientation = 1;
-                imageView.setRotate(orientation * 90);
-                bpieces.getChildren().add(imageView);
-                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
-                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
-                toFront();
+                rotate();
+                event.consume();
             }
-            if (key.equals(KeyCode.UP)) {
+            if (k == KeyCode.UP) {
                 orientation = 0;
-                imageView.setRotate(orientation * 90);
-                bpieces.getChildren().add(imageView);
-                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
-                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
-                toFront();
+                rotate();
+                event.consume();
             }
-            if (key.equals(KeyCode.LEFT)) {
+            if (k == KeyCode.LEFT) {
                 orientation = 3;
-                imageView.setRotate(orientation * 90);
-                bpieces.getChildren().add(imageView);
-                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
-                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
-                toFront();
+                rotate();
+                event.consume();
             }
-            if (key.equals(KeyCode.DOWN)) {
+            if (k == KeyCode.DOWN) {
                 orientation = 2;
-                imageView.setRotate(orientation * 90);
-                bpieces.getChildren().add(imageView);
-                setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
-                setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
-                toFront();
+                rotate();
+                event.consume();
             }
         });
-            
-            
 
         }
+
+        /** The author of this method is Nicole Wang
+         * This method rotates the image of the piece
+         */
+        private void rotate() {
+            ImageView iv1 = new ImageView();
+            iv1.setImage(img);
+            iv1.setRotate(orientation * 90);
+            img = iv1.getImage();
+            setImage(img);
+            setFitWidth((1 + (orientation % 2)) * SQUARE_SIZE);
+            setFitHeight((2 - (orientation % 2)) * SQUARE_SIZE);
+            toFront();
+        }
+
+
+
+
 
         /**
          * The author of this method is Nicole Wang
