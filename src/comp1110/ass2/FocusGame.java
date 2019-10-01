@@ -611,6 +611,16 @@ public class FocusGame {
      */
     public static String getSolution(String challenge) {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
+
+        // start from top left of challenge square using task 6 method but for covering the cell (my task 6)
+        // create an array list of all possible locations
+        // create an array list of possible pieces
+        // remove the locations that the tiles cover that are placed - need method to create an arrayList of all locations a given placement covers
+        // when a piece is used, remove it from the array list
+        // only add a piece if it is present in the array list
+        // feed in my task 6 code with the first location in the list on loop until location list is empty
+        // if location list is not empty and the piece list is empty, loop and make sure to appropriately reset the two array lists.
+
         return null;
     }
 

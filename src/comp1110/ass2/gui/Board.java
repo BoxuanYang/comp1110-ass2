@@ -7,7 +7,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,7 +34,6 @@ public class Board extends Application {
 
 
     private static final String URI_BASE = "assets/";
-    private static final int ASCII = 97;
 
     // placement containing all pieces on board
     private String placement = "";
@@ -47,8 +45,6 @@ public class Board extends Application {
     private int bx;
     // y location on board
     private int by;
-
-    private TextField textField;
 
     // node groups
     private final Group root = new Group();
@@ -230,7 +226,9 @@ public class Board extends Application {
                 snapToHome();
             }
 
+            // create temporary string of current pieces on the board
             String placementtmp=placement;
+
             // find index of piece character in placement (containing all pieces on the board)
             int p = placementtmp.indexOf(piece);
             int length = placementtmp.length();
@@ -240,7 +238,11 @@ public class Board extends Application {
                 placementtmp = placement.substring(0,p) + placement.substring(p+4,length);
             }
 
+            // create temporary string of the piece currently being held
             String tmp = Character.toString(piece) + col + row + orientation + "";
+
+            // if the current piece along with the other pieces on the board is still valid then update placement
+            // and set on board. Otherwise the piece goes back to its initial position.
             if (isPlacementStringValid(placementtmp + tmp)) {
                 setLayoutX(bx);
                 setLayoutY(by);
