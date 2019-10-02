@@ -5,13 +5,10 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -21,28 +18,26 @@ import static comp1110.ass2.Solution.SOLUTIONS;
 import static comp1110.ass2.gui.Viewer.*;
 import static comp1110.ass2.FocusGame.*;
 
-/*
-The author of this class is the entire group, detailed
-authorship is contained in method annotation.
-*/
 
 public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Focus Game in JavaFX that only allows pieces to be placed in valid places
-    
+
     // window layout
-    
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
+
     // playable board layout
     private static final int SQUARE_SIZE = 60;
 
     // playable board position
     private static final int MARGIN_X = 43;
     private static final int MARGIN_Y = 45;
+    
     private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
     private static final int BOARD_END_X = BOARD_WIDTH-MARGIN_X;
     private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE*5;
+
     long lastRotationTime = System.currentTimeMillis();
     private static final long ROTATION_THRESHOLD = 50; // allow rotation every 50 milliseconds
 
@@ -64,8 +59,8 @@ public class Board extends Application {
     private final Group root = new Group();
     private final Group bpieces = new Group();
     //The author of the above code is Nicole Wang.
-    
-    
+
+
     /**
      * The author of this method is Nicole Wang
      * returns y location for a piece in a given row
@@ -98,8 +93,8 @@ public class Board extends Application {
     //the column location of each piece where index 0 is a, 1 is b, etc.
     int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
     //The author of the above arrays is Nicole Wang.
-    
-    
+
+
     /**The author of this class is Nicole Wang
      * Inspiration from comp1110 assignment 1
      * Graphical representation of the pieces
@@ -179,7 +174,6 @@ public class Board extends Application {
             setFitWidth(SQUARE_SIZE * width);
             setFitHeight(SQUARE_SIZE * height);
 
-
             /* event handlers */
 
             // find points of mouse at beginning of drag
@@ -200,7 +194,7 @@ public class Board extends Application {
             });
             // snap into place upon completed drag
             setOnMouseReleased(event -> {
-                snapToGrid(piece);
+                snapToGrid();
             });
 
             /* event handlers */
@@ -247,7 +241,7 @@ public class Board extends Application {
          * The author of this method is Nicole Wang
          * Snap piece to the nearest grid position
          */
-        private void snapToGrid(char piece) {
+        private void snapToGrid() {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
                 col = closestColumn();
@@ -262,24 +256,21 @@ public class Board extends Application {
             // create temporary string of current pieces on the board
             String placementtmp=placement;
 
-            // find index of piece character in placement (containing all pieces on the board)
             int p = placementtmp.indexOf(piece);
-            int length = placementtmp.length();
-
             // if piece being snapped is already on the board, remove it from the placement string of existing pieces
             if (p != -1) {
-                placementtmp = placement.substring(0,p) + placement.substring(p+4,length);
+                placementtmp = placement.substring(0,p) + placement.substring(p+4);
             }
 
             // create temporary string of the piece currently being held
-            String tmp = Character.toString(piece) + col + row + orientation + "";
+            String tmp = currentState();
 
             // if the current piece along with the other pieces on the board is still valid then update placement
             // and set on board. Otherwise the piece goes back to its initial position.
             if (isPlacementStringValid(placementtmp + tmp)) {
                 setLayoutX(bx);
                 setLayoutY(by);
-                placement = placementtmp + tmp;
+                updateBoardStates();
             } else {
                 snapToHome();
             }
@@ -314,13 +305,45 @@ public class Board extends Application {
      * Snap tile back to home position (if not on the grid
      **/
     private void snapToHome() {
+        removeBoardState();
         setLayoutX(X);
         setLayoutY(Y);
         orientation = 0;
+        rotate();
+    }
+
+        /** Authored by Nicole Wang
+         * Removes the current piece from the current board states string
+         */
+    private void removeBoardState() {
         int p = placement.indexOf(piece);
         // if piece being snapped is already on the board, remove it from the placement string of existing pieces
         if (p != -1) {
             placement = placement.substring(0,p) + placement.substring(p+4);
+        }
+    }
+
+        /** Authored by Nicole Wang
+         * Updates the boardstates so that the current piece is updated
+         */
+    private void updateBoardStates() {
+        removeBoardState();
+        placement = placement + currentState();
+    }
+
+        /** Authored by Nicole Wang
+         * @return the placement piece string for the current piece
+         */
+    private String currentState(){
+        if (orientation == 0 || orientation == 2) {
+            System.out.println("Piece " + Character.toString(piece) + col + row + orientation + "");
+            System.out.println("Placement: "+placement);
+            return Character.toString(piece) + col + row + orientation + "";
+        } else {
+            System.out.println("Piece " + Character.toString(piece) + (col+1) + (row) + orientation + "");
+            System.out.println("Placement: "+placement);
+            return Character.toString(piece) + (col+1) + (row) + orientation + "";
+
         }
     }
 
@@ -359,8 +382,8 @@ public class Board extends Application {
     private void resetPieces() {
         // snap each piece back to home
         bpieces.toFront();
-        for (Node n : bpieces.getChildren()) {
-            ((DraggablePiece) n).snapToHome();
+        for (int i=0; i < 10; i++) {
+            pieces.get(i).snapToHome();
         }
         // empty the placement string
         placement = "";
@@ -368,9 +391,8 @@ public class Board extends Application {
 
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
+
     // TASK 8: get a starting placement from SOLUTIONS in TestUtility.Solution
-    
-    //The author of this method is Boxuan Yang.
     public String startPlacement() {
         Random random = new Random();
         int index = random.nextInt(120);
@@ -378,7 +400,6 @@ public class Board extends Application {
     }
 
     // TASK 8: add the startPlacement to the board
-    //The author of this method is Boxuan Yang.
     public void placeStart(String objective) {
         for(int i = 0; i < objective.length(); i++){
             char piece = Character.toLowerCase(objective.charAt(i));
@@ -391,7 +412,6 @@ public class Board extends Application {
 
 
     // TASK 8: return a solution for the game
-    //The author of this method is Boxuan Yang.
     public String gameSolution(String objective) {
         Solution solution = SOLUTIONS[0];
         for(int i = 0; i < 120; i++){

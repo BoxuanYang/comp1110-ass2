@@ -20,5 +20,22 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/game.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.base" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.controls" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.fxml" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.graphics" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.media" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.swing" />
+          <root url="jar://$MODULE_DIR$/game.jar!/javafx.web" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
