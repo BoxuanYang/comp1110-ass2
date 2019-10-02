@@ -13,7 +13,7 @@ author:
 # Write the class or method being reviewed here.
 #
 component:
-onBoard method in Board class
+:onBoard method in Board class
 
 # Write a list of review comments here.
 #
