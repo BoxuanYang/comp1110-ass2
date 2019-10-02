@@ -179,8 +179,6 @@ public class Board extends Application {
             setFitWidth(SQUARE_SIZE * width);
             setFitHeight(SQUARE_SIZE * height);
 
-            // gives shadow effect
-            setEffect(dropShadow);
 
             /* event handlers */
 
@@ -274,7 +272,7 @@ public class Board extends Application {
             }
 
             // create temporary string of the piece currently being held
-            String tmp = Character.toString(pieThe author of this method is Boxuan Yang.ce) + col + row + orientation + "";
+            String tmp = Character.toString(piece) + col + row + orientation + "";
 
             // if the current piece along with the other pieces on the board is still valid then update placement
             // and set on board. Otherwise the piece goes back to its initial position.

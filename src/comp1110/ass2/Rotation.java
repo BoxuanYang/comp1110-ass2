@@ -22,6 +22,7 @@ public class Rotation {
             }
 
         }
+
         if (rotation == 2) {
             for (int c = 0; c < colLength; c++) {
                 for (int r = 0; r < rowLength; r++) {
@@ -36,10 +37,9 @@ public class Rotation {
                 for (int r = 0; r < rowLength; r++) {
                     rotated[r][c] = s[colLength - c -1][r];
                 }
-
             }
-
         }
+
     return rotated;
     }
 
