@@ -1,0 +1,30 @@
+# Write your name and UID here.
+#
+reviewer:
+    name: Nicole Wang
+    uid: u6947648
+
+# Write the name of the author of the code here.
+#
+author:
+  name: Boxuan Yang
+  uid: u6778195
+
+# Write the class or method being reviewed here.
+#
+component: Viewer Class - makePlacement method
+
+# Write a list of review comments here.
+#
+comments:
+  -What are the best features of the code?
+  The purpose of each line of code is clear and easy to read
+  -Is the code well-documented?
+  The code is well commented. Line 112 could use a bit more commenting.
+  -Is the program decomposition appropriate?
+  Yes, but maybe could be defined as a private method since it is only needed for that class
+  -Does it follow Java code conventions and is the style consistent throughout?
+  Yes. Some class variables could be created, for example for width and height in line 125 and line 128. Style is consistent.
+
+
+
