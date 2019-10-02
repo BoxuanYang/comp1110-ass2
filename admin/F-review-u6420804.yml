@@ -17,11 +17,10 @@ component: onBoard method in Board class
 # Write a list of review comments here.
 #
 comments:
-  - The method is good, and works. 
-  It has good comments to tell the reader what is happening with the code 
-  It is relevant to the program, as it determines if the piece is on the board which is esstential for the Task 7.
-  To reduce the length of the if statements, the variables that are used can be intialised earlier for example MARGIN_Y + SQUARE_SIZE is used a couple of times, the variable can be intialised earlier
- Besides the variable naming, it is efficent (use of !before instead of =!)
+  - The method is good, and works. It has good comments to tell the reader what is happening with the code 
+  - It is relevant to the program, as it determines if the piece is on the board which is esstential for the Task 7.
+  - To reduce the length of the if statements, the variables that are used can be intialised earlier for example MARGIN_Y + SQUARE_SIZE is used a couple of times, the variable can be intialised earlier
+ - Besides the variable naming, it is efficent (use of !before instead of =!)
 
 
 
