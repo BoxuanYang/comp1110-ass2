@@ -11,6 +11,10 @@ import static comp1110.ass2.State.*;
  * (https://www.smartgames.eu/uk/one-player-games/iq-focus)
  */
 
+/*
+The author of this class is the entire group, detailed authorship is contained
+in method annotation.
+*/
 
 public class FocusGame {
 
@@ -23,6 +27,7 @@ public class FocusGame {
 
     };
 
+    //The author of this is Boxuan Yang.
     //The width and height for all pieces in orientation 0
     static int[][] width_and_height = {
             {3, 2},//a
@@ -37,6 +42,7 @@ public class FocusGame {
             {4, 2}//j
     };
 
+    //The author of this is Boxuan Yang.
     //All states of all pieces in orientation 0
     static State[][] pieceMap = {
             {GREEN, WHITE, RED,//a
@@ -69,7 +75,11 @@ public class FocusGame {
             {GREEN, GREEN, WHITE, RED,//j
              GREEN, null,  null,  null}
     };
-
+    
+    /*
+    The author of this method is Apoorva Sajja and Nicole Wang.
+    */
+    
     /**
      * Determine whether a piece placement is well-formed according to the
      * following criteria:
@@ -108,7 +118,7 @@ public class FocusGame {
         return piecePlacement.charAt(3) <= '3' && piecePlacement.charAt(3) >= '0';
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a piece placement, return the width specified by its type and orientation
      * @param placement a well-formed piece placement
      * @return an int value
@@ -130,7 +140,7 @@ public class FocusGame {
         return width;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a piece placement, return the width specified by its type and orientation
      * @param placement a well-formed piece placement
      * @return an int value
@@ -151,7 +161,7 @@ public class FocusGame {
         return height;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a piece placement string, xoff distance off left-top point and yoff distance off left-top point
      * ,return the state at that position
      * @param placement A  well-formed piece placement string
@@ -184,7 +194,8 @@ public class FocusGame {
         return pieceMap[type][(width - 1 - yoff) + xoff * width];
     }
 
-    /**The placement string can be assumed to be well-formed
+    /**The author of this method is Boxuan Yang.
+     * The placement string can be assumed to be well-formed
      * Return true if it is within the board, false otherwise
      * @param placement a piece placement string of length 4
      * @return a boolean value
@@ -216,7 +227,7 @@ public class FocusGame {
         return true;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given two pieces placement, return true if they overlap and false otherwise.
      * The two placmeent string can be assumed to be well-formed and within the board
      * @param str1 First piece placement String
@@ -274,8 +285,7 @@ public class FocusGame {
         return false;
     }
 
-    /**
-     * The author of this method is Nicole Wang
+    /**The author of this method is Nicole Wang.
      * Determine whether a placement string is well-formed:
      * - it consists of exactly N four-character piece placements (where N = 1 .. 10);
      * - each piece placement is well-formed
@@ -320,7 +330,7 @@ public class FocusGame {
     }
 
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Determine whether a placement string is valid.
      *
      * To be valid, the placement string must be:
@@ -367,7 +377,7 @@ public class FocusGame {
     }
 
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a pair of coordinates, return true if they are within the central board.
      * central board: (3,1) -> (5,1)
      *                (3,2) -> (5,2)
@@ -381,7 +391,7 @@ public class FocusGame {
     }
 
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a char, return the corresponding state.
      * @param x A char whose value can only be 'W', 'R', 'B', 'G'
      * @return A State
@@ -400,7 +410,7 @@ public class FocusGame {
     }
 
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a placement string and a char type, return true if the type
      * is already included in placement string.
      * @param placement A valid placement string
@@ -422,7 +432,7 @@ public class FocusGame {
     }
 
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a placement string and a pice placement string, return true if the pice placement does not
      * overlap with the placement string and false otherwise. We can assume the piece is not included in
      * placement string.
@@ -448,7 +458,7 @@ public class FocusGame {
         return true;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a piece, return true if it fits the challenge specified by the challenge string, false otherwise
      * @param piece A well-formed piece placement string
      * @param challenge A challenge stirng consists of 9 characters of 4 types, i.e. 'W', 'R', 'B', 'G'
@@ -491,7 +501,7 @@ public class FocusGame {
         return true;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a piece placement and a square with coordinate (col, row), return true if
      * the piece covers the square and flase otherwise
      * @param piece A piece placement
@@ -517,7 +527,7 @@ public class FocusGame {
         return false;
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Given a string describing a placement of pieces and a string describing
      * a challenge, return a set of all possible next viable piece placements
      * which cover a specific board location.
