@@ -5,13 +5,10 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -177,9 +174,6 @@ public class Board extends Application {
             setFitWidth(SQUARE_SIZE * width);
             setFitHeight(SQUARE_SIZE * height);
 
-            // gives shadow effect
-            setEffect(dropShadow);
-
             /* event handlers */
 
             // find points of mouse at beginning of drag
@@ -200,7 +194,7 @@ public class Board extends Application {
             });
             // snap into place upon completed drag
             setOnMouseReleased(event -> {
-                snapToGrid(piece);
+                snapToGrid();
             });
 
             /* event handlers */
