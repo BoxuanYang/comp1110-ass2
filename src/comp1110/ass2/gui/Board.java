@@ -21,26 +21,28 @@ import static comp1110.ass2.Solution.SOLUTIONS;
 import static comp1110.ass2.gui.Viewer.*;
 import static comp1110.ass2.FocusGame.*;
 
+/*
+The author of this class is the entire group, detailed
+authorship is contained in method annotation.
+*/
 
 public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Focus Game in JavaFX that only allows pieces to be placed in valid places
-
+    
     // window layout
+    
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
-
     // playable board layout
     private static final int SQUARE_SIZE = 60;
 
     // playable board position
     private static final int MARGIN_X = 43;
     private static final int MARGIN_Y = 45;
-    
     private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
     private static final int BOARD_END_X = BOARD_WIDTH-MARGIN_X;
     private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE*5;
-
     long lastRotationTime = System.currentTimeMillis();
     private static final long ROTATION_THRESHOLD = 50; // allow rotation every 50 milliseconds
 
@@ -61,18 +63,9 @@ public class Board extends Application {
     // node groups
     private final Group root = new Group();
     private final Group bpieces = new Group();
-
-    // creates shadow effect on piece
-    private static DropShadow dropShadow;
-
-    /** Static initializer to initialize dropShadow */ {
-        dropShadow = new DropShadow();
-        dropShadow.setOffsetX(2.0);
-        dropShadow.setOffsetY(2.0);
-        dropShadow.setColor(Color.color(0, 0, 0, .4));
-    }
-
-
+    //The author of the above code is Nicole Wang.
+    
+    
     /**
      * The author of this method is Nicole Wang
      * returns y location for a piece in a given row
@@ -100,17 +93,14 @@ public class Board extends Application {
         return margins;
     }
 
-    /**
-     * the row location of each piece where index 0 is a, 1 is b, etc.
-     **/
+    //the row location of each piece where index 0 is a, 1 is b, etc.
     int[] rows = {3, 3, 1, 4, 4, 4, 4, 3, 3, 2};
-    /**
-     * the column location of each piece where index 0 is a, 1 is b, etc.
-     **/
+    //the column location of each piece where index 0 is a, 1 is b, etc.
     int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
-
-    /**
-     * The author of this class is Nicole Wang
+    //The author of the above arrays is Nicole Wang.
+    
+    
+    /**The author of this class is Nicole Wang
      * Inspiration from comp1110 assignment 1
      * Graphical representation of the pieces
      */
@@ -145,7 +135,7 @@ public class Board extends Application {
         }
     }
 
-    /**
+    /**The author of this class is Nicole Wang.
      * Inspiration for this class was taken from comp1110 Assignment 1 and lab 6
      * class extending piece with the ability to be dragged and dropped and snapped onto the board
      **/
@@ -284,7 +274,7 @@ public class Board extends Application {
             }
 
             // create temporary string of the piece currently being held
-            String tmp = Character.toString(piece) + col + row + orientation + "";
+            String tmp = Character.toString(pieThe author of this method is Boxuan Yang.ce) + col + row + orientation + "";
 
             // if the current piece along with the other pieces on the board is still valid then update placement
             // and set on board. Otherwise the piece goes back to its initial position.
@@ -380,8 +370,9 @@ public class Board extends Application {
 
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
-
     // TASK 8: get a starting placement from SOLUTIONS in TestUtility.Solution
+    
+    //The author of this method is Boxuan Yang.
     public String startPlacement() {
         Random random = new Random();
         int index = random.nextInt(120);
@@ -389,6 +380,7 @@ public class Board extends Application {
     }
 
     // TASK 8: add the startPlacement to the board
+    //The author of this method is Boxuan Yang.
     public void placeStart(String objective) {
         for(int i = 0; i < objective.length(); i++){
             char piece = Character.toLowerCase(objective.charAt(i));
@@ -401,6 +393,7 @@ public class Board extends Application {
 
 
     // TASK 8: return a solution for the game
+    //The author of this method is Boxuan Yang.
     public String gameSolution(String objective) {
         Solution solution = SOLUTIONS[0];
         for(int i = 0; i < 120; i++){
