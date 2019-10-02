@@ -1,5 +1,7 @@
 package comp1110.ass2;
-
+/*
+The author of this class is Nicole
+*/
     public class Location {
         private int X;
         private int Y;

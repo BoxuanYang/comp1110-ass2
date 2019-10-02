@@ -1,5 +1,7 @@
 package comp1110.ass2;
-
+/*
+The author of this class is Apoorva Sajja
+*/
 import static comp1110.ass2.Shape.getShape;
 
 public class Rotation {

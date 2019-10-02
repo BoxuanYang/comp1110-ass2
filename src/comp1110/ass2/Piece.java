@@ -1,5 +1,7 @@
 package comp1110.ass2;
-
+/*
+The author of this class is Apoorva Sajja
+*/
 
 public class Piece {
     private Location location;

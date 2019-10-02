@@ -1,6 +1,8 @@
 package comp1110.ass2;
 import static comp1110.ass2.State.*;
-
+/*
+The author of this class is Apoorva Sajja and Nicole Wang
+*/
 public enum Shape {
 
     a ('a'), b ('b'), c ('c'), d ('d'), e ('e'), f ('f'), g ('g'), h ('h'), i ('h'), j ('j');

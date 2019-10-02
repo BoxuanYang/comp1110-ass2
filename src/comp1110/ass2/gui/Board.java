@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -60,16 +61,7 @@ public class Board extends Application {
     // node groups
     private final Group root = new Group();
     private final Group bpieces = new Group();
-
-    // creates shadow effect on piece
-    private static DropShadow dropShadow;
-
-    /** Static initializer to initialize dropShadow */ {
-        dropShadow = new DropShadow();
-        dropShadow.setOffsetX(2.0);
-        dropShadow.setOffsetY(2.0);
-        dropShadow.setColor(Color.color(0, 0, 0, .4));
-    }
+    //The author of the above code is Nicole Wang.
 
 
     /**
@@ -99,17 +91,14 @@ public class Board extends Application {
         return margins;
     }
 
-    /**
-     * the row location of each piece where index 0 is a, 1 is b, etc.
-     **/
+    //the row location of each piece where index 0 is a, 1 is b, etc.
     int[] rows = {3, 3, 1, 4, 4, 4, 4, 3, 3, 2};
-    /**
-     * the column location of each piece where index 0 is a, 1 is b, etc.
-     **/
+    //the column location of each piece where index 0 is a, 1 is b, etc.
     int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
+    //The author of the above arrays is Nicole Wang.
 
-    /**
-     * The author of this class is Nicole Wang
+
+    /**The author of this class is Nicole Wang
      * Inspiration from comp1110 assignment 1
      * Graphical representation of the pieces
      */
@@ -144,7 +133,7 @@ public class Board extends Application {
         }
     }
 
-    /**
+    /**The author of this class is Nicole Wang.
      * Inspiration for this class was taken from comp1110 Assignment 1 and lab 6
      * class extending piece with the ability to be dragged and dropped and snapped onto the board
      **/
@@ -152,8 +141,6 @@ public class Board extends Application {
         double X, Y; // position where tile initially begins
         double mouseX, mouseY; // last known mouse positions
         int orientation; // piece orientation
-        int width; // width of piece
-        int height; // height of piece
         char piece; // piece type
         Image img;
 
@@ -185,8 +172,8 @@ public class Board extends Application {
             setLayoutY(Y);
 
             // Sets the piece to the correct size
-            width = getSquaresOfWidth(piece, orientation);
-            height = getSquaresOfHeight(piece, orientation);
+            int width = getSquaresOfWidth(piece, orientation);
+            int height = getSquaresOfHeight(piece, orientation);
             setFitWidth(SQUARE_SIZE * width);
             setFitHeight(SQUARE_SIZE * height);
 
@@ -213,7 +200,7 @@ public class Board extends Application {
             });
             // snap into place upon completed drag
             setOnMouseReleased(event -> {
-                snapToGrid();
+                snapToGrid(piece);
             });
 
             /* event handlers */
@@ -222,7 +209,6 @@ public class Board extends Application {
                             lastRotationTime = System.currentTimeMillis();
                             orientation = (orientation + 1) % 4;
                             rotate();
-                            updateBoardStates();
                             event.consume();
                         }});
 
@@ -232,10 +218,12 @@ public class Board extends Application {
          * This method rotates the image of the piece
          */
         private void rotate() {
-            int p = piece - 97;
+            setFitWidth(getSquaresOfWidth(piece, orientation)*SQUARE_SIZE);
+            setFitHeight(getSquaresOfHeight(piece, orientation)*SQUARE_SIZE);
             toFront();
+            // turn piece character into corresponding arraylist (pieces) index
+            int p = piece - 97;
             pieces.get(p).setRotate(orientation*90);
-            System.out.println("Rotated: "+orientation);
         }
 
         /**
@@ -243,12 +231,7 @@ public class Board extends Application {
          * Find closest column to the current piece
          */
         private int closestColumn(){
-            int c = (int)(Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
-            if (c < 0) {
-                System.out.println(0);
-                return 0;
-            }
-            return c;
+            return (int)(Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
 
         }
 
@@ -257,13 +240,7 @@ public class Board extends Application {
          * Find closest row to the current piece
          */
         private int closestRow(){
-            int r = (int)(Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
-            if (r < 0) {
-                System.out.println(0);
-                return 0;
-            }
-            System.out.println("Closest row: " + r);
-            return r;
+            return (int)(Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
         }
 
         /**
@@ -277,6 +254,7 @@ public class Board extends Application {
                 bx = (BOARD_START_X + (SQUARE_SIZE * col));
                 row = closestRow();
                 by = (MARGIN_Y + (SQUARE_SIZE * row));
+
             } else {
                 snapToHome();
             }

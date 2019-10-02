@@ -40,6 +40,7 @@ public class Viewer extends Application {
     private final Group root = new Group();
     public static Group controls = new Group();
     private TextField textField;
+    //The author of this state array is Boxuan Yang.
     static int[][] width_and_height = {
             {3, 2},//a
             {4, 2},//b
@@ -52,7 +53,8 @@ public class Viewer extends Application {
             {2, 2},//i
             {4, 2}//j
     };
-
+    
+    //The author of this method is Boxuan Yang.
     static void drawHorizontal(double x, double y){
         //Draw the horizontal lines
         for(int i = 0; i < 6; i++){
@@ -66,7 +68,8 @@ public class Viewer extends Application {
             controls.getChildren().add(horizontal);
         }
     }
-
+    
+    //The author of this method is Boxuan Yang.
     static void drawVertical(double x, double y){
         //Draw the vertical lines
         for(int i = 0; i < 10; i++){
@@ -82,12 +85,13 @@ public class Viewer extends Application {
         }
     }
 
+    //The author of this method is Boxuan Yang.
     static void drawBoard(double x, double y) {
         drawHorizontal(x,y);
         drawVertical(x,y);
     }
 
-    /**
+    /**The author of this method is Boxuan Yang.
      * Draw a placement in the window, removing any previously drawn one
      *
      * @param placement A valid placement string
@@ -148,12 +152,14 @@ public class Viewer extends Application {
         // FIXME Task 4: implement the simple placement viewer
 
     }
-
+    
+    //The author of this method is Boxuan Yang.
     public static int getSquaresOfWidth(char piece, int orientation){
         int pieceIndex = piece - 97;
         return width_and_height[pieceIndex][0];
     }
-
+    
+    //The author of this method is Boxuan Yang.
     public static int getSquaresOfHeight(char piece, int orientation){
         int pieceIndex = piece - 97;
         return width_and_height[pieceIndex][1];

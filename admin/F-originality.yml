@@ -20,8 +20,8 @@ declaration: >-
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
 #collaboration:
-  #- name:
-  #  comment: >-
+ # - name:
+ #   comment: >-
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -30,9 +30,9 @@ declaration: >-
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
-#code:
-  #- comment:
-  #  url:
+# code:
+ # - comment:
+ #   url:
   #  licence:
 
 # Use this to list any assets (artwork, sound, etc) that you used.
@@ -42,17 +42,17 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external assets)
 #assets:
-  #- comment:
+ # - comment:
   #  url:
-  #  licence:
+   # licence:
 
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
+  - name: Boxuan Yang
+    uid:  u6778195
   - name: Nicole Wang
     uid: u6947648
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Apoorva Sajja
+    uid:  u6420804
