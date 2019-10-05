@@ -1,0 +1,26 @@
+# Write your name and UID here.
+#
+reviewer:
+  name: Boxuan Yang
+  uid: u6778195
+
+# Write the name of the author of the code here.
+#
+author:
+  name: Apoorva Sajja
+  uid: u6420804
+
+# Write the class or method being reviewed here.
+#
+component: The Rotation class
+
+# Write a list of review comments here.
+#
+comments:
+  - The best feature of this code is that it achives a specific function
+  - using different classes. The code is not well-documented, it does not have enough
+  - annotation. The class does a simple job so I think the decomposition is fine. This
+  - class follows the java convention beacuse the naming of variables
+  - and methods are self-explanatory. I did not find any potential error.
+
+
