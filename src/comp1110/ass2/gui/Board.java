@@ -33,10 +33,10 @@ public class Board extends Application {
     // playable board position
     private static final int MARGIN_X = 43;
     private static final int MARGIN_Y = 45;
-    
+
     private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
-    private static final int BOARD_END_X = BOARD_WIDTH-MARGIN_X;
-    private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE*5;
+    private static final int BOARD_END_X = BOARD_WIDTH - MARGIN_X;
+    private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE * 5;
 
     long lastRotationTime = System.currentTimeMillis();
     private static final long ROTATION_THRESHOLD = 50; // allow rotation every 50 milliseconds
@@ -95,7 +95,8 @@ public class Board extends Application {
     //The author of the above arrays is Nicole Wang.
 
 
-    /**The author of this class is Nicole Wang
+    /**
+     * The author of this class is Nicole Wang
      * Inspiration from comp1110 assignment 1
      * Graphical representation of the pieces
      */
@@ -130,7 +131,8 @@ public class Board extends Application {
         }
     }
 
-    /**The author of this class is Nicole Wang.
+    /**
+     * The author of this class is Nicole Wang.
      * Inspiration for this class was taken from comp1110 Assignment 1 and lab 6
      * class extending piece with the ability to be dragged and dropped and snapped onto the board
      **/
@@ -140,6 +142,8 @@ public class Board extends Application {
         int orientation; // piece orientation
         char piece; // piece type
         Image img;
+        int width;
+        int height;
 
         /**
          * The author of this method is Nicole Wang
@@ -169,8 +173,8 @@ public class Board extends Application {
             setLayoutY(Y);
 
             // Sets the piece to the correct size
-            int width = getSquaresOfWidth(piece, orientation);
-            int height = getSquaresOfHeight(piece, orientation);
+            width = getSquaresOfWidth(piece, orientation);
+            height = getSquaresOfHeight(piece, orientation);
             setFitWidth(SQUARE_SIZE * width);
             setFitHeight(SQUARE_SIZE * height);
 
@@ -199,33 +203,40 @@ public class Board extends Application {
 
             /* event handlers */
             setOnScroll(event -> {            // scroll to change orientation
-                if (System.currentTimeMillis() - lastRotationTime > ROTATION_THRESHOLD){
-                            lastRotationTime = System.currentTimeMillis();
-                            orientation = (orientation + 1) % 4;
-                            rotate();
-                            event.consume();
-                        }});
+                if (System.currentTimeMillis() - lastRotationTime > ROTATION_THRESHOLD) {
+                    lastRotationTime = System.currentTimeMillis();
+                    orientation = (orientation + 1) % 4;
+                    rotate();
+                    event.consume();
+                }
+            });
 
         }
 
-        /** The author of this method is Nicole Wang
+        /**
+         * The author of this method is Nicole Wang
          * This method rotates the image of the piece
          */
         private void rotate() {
-            setFitWidth(getSquaresOfWidth(piece, orientation)*SQUARE_SIZE);
-            setFitHeight(getSquaresOfHeight(piece, orientation)*SQUARE_SIZE);
+            setFitWidth(getSquaresOfWidth(piece, orientation) * SQUARE_SIZE);
+            setFitHeight(getSquaresOfHeight(piece, orientation) * SQUARE_SIZE);
             toFront();
             // turn piece character into corresponding arraylist (pieces) index
             int p = piece - 97;
-            pieces.get(p).setRotate(orientation*90);
+            pieces.get(p).setRotate(orientation * 90);
         }
+
 
         /**
          * Authored by Nicole Wang
          * Find closest column to the current piece
          */
-        private int closestColumn(){
-            return (int)(Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
+        private int closestColumn() {
+            // pieces of height 2 and width 3 must be offset by half a square size to remain within the board
+            if ((orientation == 1 || orientation == 3) && width == 3 && height == 2) {
+                return (int) (Math.round((getLayoutX() - SQUARE_SIZE / 2 - BOARD_START_X) / SQUARE_SIZE));
+            }
+            return (int) (Math.round((getLayoutX() - BOARD_START_X) / SQUARE_SIZE));
 
         }
 
@@ -233,8 +244,12 @@ public class Board extends Application {
          * Authored by Nicole Wang
          * Find closest row to the current piece
          */
-        private int closestRow(){
-            return (int)(Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
+        private int closestRow() {
+            // pieces of height 2 and width 3 must be offset by half a square size to remain within the board
+            if ((orientation == 1 || orientation == 3) && width == 3 && height == 2) {
+                return (int) (Math.round((getLayoutY() - SQUARE_SIZE / 2 - MARGIN_Y) / SQUARE_SIZE));
+            }
+            return (int) (Math.round((getLayoutY() - MARGIN_Y) / SQUARE_SIZE));
         }
 
         /**
@@ -245,29 +260,35 @@ public class Board extends Application {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
                 col = closestColumn();
-                bx = (BOARD_START_X + (SQUARE_SIZE * col));
                 row = closestRow();
+
+
+                bx = (BOARD_START_X + (SQUARE_SIZE * col));
                 by = (MARGIN_Y + (SQUARE_SIZE * row));
 
+                // shift snapping position for pieces of width 3 (gets rid of a bug that makes these pieces not in line with the board)
+                if ((orientation == 1 || orientation == 3) && width == 3 && height == 2) {
+                    bx = bx + SQUARE_SIZE / 2;
+                    by = by + SQUARE_SIZE / 2;
+                }
             } else {
                 snapToHome();
+                System.out.println("not on board");
             }
 
             // create temporary string of current pieces on the board
-            String placementtmp=placement;
+            String placementtmp = placement;
 
             int p = placementtmp.indexOf(piece);
             // if piece being snapped is already on the board, remove it from the placement string of existing pieces
             if (p != -1) {
-                placementtmp = placement.substring(0,p) + placement.substring(p+4);
+                placementtmp = placement.substring(0, p) + placement.substring(p + 4);
             }
 
-            // create temporary string of the piece currently being held
-            String tmp = currentState();
 
             // if the current piece along with the other pieces on the board is still valid then update placement
             // and set on board. Otherwise the piece goes back to its initial position.
-            if (isPlacementStringValid(placementtmp + tmp)) {
+            if (isPlacementStringValid(placementtmp + currentState())) {
                 setLayoutX(bx);
                 setLayoutY(by);
                 updateBoardStates();
@@ -276,78 +297,91 @@ public class Board extends Application {
             }
 
         }
-            /**
-             * The author of this method is Nicole Wang
-             * Checks to see if piece is on the board
-             */
-            private boolean onBoard() {
-                // check if it is in the correct x location to be on board
-                if(!(mouseX >= BOARD_START_X && mouseX < (BOARD_END_X))) {
-                    return false;
-                }
-                // check if it is in the correct y location to be on board
-                if(!(mouseY >= MARGIN_Y && mouseY < (BOARD_END_Y))) {
-                    return false;
-                }
-                // check it is not in the bottom left corner
-                if(mouseX >= BOARD_START_X && mouseX < BOARD_START_X+SQUARE_SIZE && mouseY >= MARGIN_Y+SQUARE_SIZE*4 && mouseY < (BOARD_END_Y)) {
-                    return false;
-                }
-                // check it is not in the bottom right corner
-                if(mouseY >= BOARD_START_X+SQUARE_SIZE*8 && mouseY < BOARD_END_X && mouseY >= MARGIN_Y+SQUARE_SIZE*4 && mouseY < (BOARD_END_Y)) {
-                    return false;
-                }
-                return true;
+
+        /**
+         * The author of this method is Nicole Wang
+         * Checks to see if piece is on the board
+         */
+        private boolean onBoard() {
+            // check if it is in the correct x location to be on board
+            if (!(mouseX >= BOARD_START_X && mouseX < (BOARD_END_X))) {
+                return false;
             }
+            // check if it is in the correct y location to be on board
+            if (!(mouseY >= MARGIN_Y && mouseY < (BOARD_END_Y))) {
+                return false;
+            }
+            // check it is not in the bottom left corner
+            if (mouseX >= BOARD_START_X && mouseX < BOARD_START_X + SQUARE_SIZE && mouseY >= MARGIN_Y + SQUARE_SIZE * 4 && mouseY < (BOARD_END_Y)) {
+                return false;
+            }
+            // check it is not in the bottom right corner
+            if (mouseY >= BOARD_START_X + SQUARE_SIZE * 8 && mouseY < BOARD_END_X && mouseY >= MARGIN_Y + SQUARE_SIZE * 4 && mouseY < (BOARD_END_Y)) {
+                return false;
+            }
+            return true;
+        }
 
-    /**
-     * The author of this method is Nicole Wang
-     * Snap tile back to home position (if not on the grid
-     **/
-    private void snapToHome() {
-        removeBoardState();
-        setLayoutX(X);
-        setLayoutY(Y);
-        orientation = 0;
-        rotate();
-    }
+        /**
+         * The author of this method is Nicole Wang
+         * Snap tile back to home position (if not on the grid
+         **/
+        private void snapToHome() {
+            removeBoardState();
+            orientation = 0;
+            rotate();
+            setLayoutX(X);
+            setLayoutY(Y);
+        }
 
-        /** Authored by Nicole Wang
+        /**
+         * Authored by Nicole Wang
          * Removes the current piece from the current board states string
          */
-    private void removeBoardState() {
-        int p = placement.indexOf(piece);
-        // if piece being snapped is already on the board, remove it from the placement string of existing pieces
-        if (p != -1) {
-            placement = placement.substring(0,p) + placement.substring(p+4);
+        private void removeBoardState() {
+            int p = placement.indexOf(piece);
+            // if piece being snapped is already on the board, remove it from the placement string of existing pieces
+            if (p != -1) {
+                placement = placement.substring(0, p) + placement.substring(p + 4);
+            }
         }
-    }
 
-        /** Authored by Nicole Wang
+        /**
+         * Authored by Nicole Wang
          * Updates the boardstates so that the current piece is updated
          */
-    private void updateBoardStates() {
-        removeBoardState();
-        placement = placement + currentState();
-    }
+        private void updateBoardStates() {
+            removeBoardState();
+            placement = placement + currentState();
+        }
 
-        /** Authored by Nicole Wang
+        /**
+         * Authored by Nicole Wang
+         *
          * @return the placement piece string for the current piece
          */
-    private String currentState(){
-        if (orientation == 0 || orientation == 2) {
-            System.out.println("Piece " + Character.toString(piece) + col + row + orientation + "");
-            System.out.println("Placement: "+placement);
-            return Character.toString(piece) + col + row + orientation + "";
-        } else {
-            System.out.println("Piece " + Character.toString(piece) + (col+1) + (row) + orientation + "");
-            System.out.println("Placement: "+placement);
-            return Character.toString(piece) + (col+1) + (row) + orientation + "";
+        private String currentState() {
+            // Creates placement piece strings for pieces that have been rotated (Take into account their offsets)
+            if (orientation == 1 || orientation == 3) {
+                // Pieces of width 4 or width 3 with height 1
+                if (width == 4 || (width == 3 && height == 1)) {
+                    System.out.println("Piece " + piece + (col + 1) + (row - 1) + orientation + "");
+                    return Character.toString(piece) + (col + 1) + (row - 1) + orientation + "";
+                }
+                // Pieces of width 3 and height 2
+                if (width == 3 && height == 2) {
+                    System.out.println("Placement: " + placement);
+                    System.out.println("Piece " + piece + (col + 1) + row + orientation + "");
+                    return Character.toString(piece) + (col + 1) + row + orientation + "";
 
+                }
+            }
+            // Normal pieces without rotation
+            return Character.toString(piece) + col + row + orientation + "";
         }
     }
 
-}
+
 
     /**
      * The author of this method is Nicole Wang
