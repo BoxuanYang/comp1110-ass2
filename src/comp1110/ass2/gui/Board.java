@@ -31,8 +31,12 @@ public class Board extends Application {
     private static final int SQUARE_SIZE = 60;
 
     // playable board position
-    private static final int MARGIN_X = 43;
+    private static final int MARGIN_X = 45;
     private static final int MARGIN_Y = 45;
+
+    private static final int PIECE_START_Y = SQUARE_SIZE;
+    private static final int PIECE_START_X = 30;
+
 
     private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
     private static final int BOARD_END_X = BOARD_WIDTH - MARGIN_X;
@@ -58,15 +62,27 @@ public class Board extends Application {
     // node groups
     private final Group root = new Group();
     private final Group bpieces = new Group();
+    private final Group board = new Group();
     //The author of the above code is Nicole Wang.
 
+
+    private void board() {
+        Image img = new Image(Board.class.getResource(URI_BASE + "board.png").toString());
+        ImageView iv = new ImageView();
+        iv.setImage(img);
+        iv.setFitHeight(6.7*SQUARE_SIZE);
+        iv.setFitWidth(10.25*SQUARE_SIZE);
+        iv.setX(BOARD_START_X-0.6*SQUARE_SIZE);
+        iv.setY(-SQUARE_SIZE/2);
+        board.getChildren().add(iv);
+    }
 
     /**
      * The author of this method is Nicole Wang
      * returns y location for a piece in a given row
      */
     private int rowPosition(int row) {
-        return MARGIN_Y * row + SQUARE_SIZE * (2 * (row - 1));
+        return PIECE_START_Y + MARGIN_Y * (row-1) + SQUARE_SIZE * (2 * (row - 1));
     }
 
     /**
@@ -74,7 +90,7 @@ public class Board extends Application {
      * returns x location for each piece in a given column
      */
     private int colPosition(int col) {
-        int margins = MARGIN_X * col;
+        int margins = PIECE_START_X + MARGIN_X * (col-1);
         switch (col) {
             case 1:
                 return margins;
@@ -506,13 +522,14 @@ public class Board extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Board");
         // draw board
-        drawBoard(BOARD_START_X,MARGIN_Y);
+        board();
         // place all pieces on board
         makeTiles();
         // create reset button
         resetButton();
 
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
+        root.getChildren().add(board);
         root.getChildren().add(controls);
         root.getChildren().add(bpieces);
         primaryStage.setScene(scene);
