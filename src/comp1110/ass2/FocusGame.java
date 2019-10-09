@@ -2,7 +2,10 @@ package comp1110.ass2;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import static comp1110.ass2.State.*;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * This class provides the text interface for the IQ Focus Game
@@ -605,6 +608,52 @@ public class FocusGame {
     }
 
     /**
+     * Given a string describing a placement of pieces and a string describing
+     * a challenge, return a set of all possible next viable piece placements
+     * which cover a specific board cell.
+     * <p>
+     * For a piece placement to be viable
+     * - it must be valid
+     * - it must be consistent with the challenge
+     *
+     * @param placement A viable placement string
+     * @param challenge The game's challenge is represented as a 9-character string
+     *                  which represents the color of the 3*3 central board area
+     *                  squares indexed as follows:
+     *                  [0] [1] [2]
+     *                  [3] [4] [5]
+     *                  [6] [7] [8]
+     *                  each character may be any of
+     *                  - 'R' = RED square
+     *                  - 'B' = Blue square
+     *                  - 'G' = Green square
+     *                  - 'W' = White square
+     * @param col       The cell's column.
+     * @param row       The cell's row.
+     * @return A set of viable piece placements, or null if there are none.
+     */
+    static Set<String> getViablePiecePlacementsOnCell(String placement, String challenge, int col, int row) {
+        // Set of strings that begin on the specified cell
+        Set<String> placements = getViablePiecePlacements(placement, challenge, col, row);
+        // update boardStates to include the challenge
+        // find strings for all possible locations that could include strings that cover the cell
+        for(int r=row; r>=0; r--) {
+            for(int c=col;c>=0;c--){
+                Set<String> add = getViablePiecePlacements(placement, challenge, col, row);
+                // add set of strings into cell
+                placements = Stream.of(placements, add).flatMap(Set::stream).collect(toSet());
+            }
+        }
+
+        // if no strings, return null
+        if (placements.isEmpty()){
+            return null;
+        }
+
+        return placements;
+    }
+
+    /**
      * Return the canonical encoding of the solution to a particular challenge.
      * <p>
      * A given challenge can only solved with a single placement of pieces.
@@ -623,9 +672,69 @@ public class FocusGame {
     public static String getSolution(String challenge) {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
 
-        // start from top left of challenge square using task 6 method but for covering the cell (my task 6)
-        // create an array list of all possible locations
-        // create an array list of possible pieces
+
+        // FIXME Task 1: create an array list of all possible locations - class definition
+        //  create method that given a placement string, removes a piece placement's location from the arraylist
+
+        /** FIXME Task 2.1:
+         * Given a placement, return an array list of points
+         * @param placement a well-formed placement
+         * @return an array list of points (all the locations that the placement covers)
+         */
+
+        /** FIXME Task 2.2:
+         * Create methods that gets the x and y from the point
+         */
+
+        /** FIXME TASK 2.3:
+         * Given an array list of points on the board (from task 2.1), create a new array list
+         * that takes these points away from the arraylist in task 1 (class definition)
+         * @param points list of points on the board
+         * @return original arraylist take away the locations of placements on the board (return arraylist including only locations that are not covered)
+         */
+
+        /** FIXME TASK 3:
+         * This will return a badly formed solution string
+         *
+         * Start from the top left of the challenge square using getViablePiecePlacementsOnCell
+         * Add piece placement to string
+         * (Use task 2.3 method) make a temporary arraylist that includes all locations not covered by that piece
+         * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location (using 2.2 get x and y methods)
+         * Add piece placement to string
+         * (Use task 2.3 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
+         * Keep on going until you get an empty arraylist. Then return the string
+         *
+         */
+
+        /** FIXME TASK 4:
+         * Order the placement sequence by piece IDs
+         *
+         * Use the task 3 placement and order it
+         */
+
+        /** FIXME TASK 4.1:
+         * Use string from task 4
+         *
+         * If a piece exhibits rotational symmetry, only return the lowest
+         * orientation value (0 or 1)
+         *
+         * Account for the case of f and g
+         * if f's or g's orientation is 2, make it 0
+         * if f's or g's orientation is 3, make it 1
+         */
+
+
+
+
+
+
+        // Task 2: create an array list of possible pieces
+
+
+        // Task 3:
+
+        // start from top left of challenge square using getViablePiecePlacementsOnCell (my task 6)
+
         // remove the locations that the tiles cover that are placed - need method to create an arrayList of all locations a given placement covers
         // when a piece is used, remove it from the array list
         // only add a piece if it is present in the array list
