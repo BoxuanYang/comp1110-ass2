@@ -1,4 +1,6 @@
 package comp1110.ass2;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -672,49 +674,64 @@ public class FocusGame {
     public static String getSolution(String challenge) {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
 
+        return null;
+    }
 
-        // FIXME Task 1: create an array list of all possible locations - class definition
-        //  create method that given a placement string, removes a piece placement's location from the arraylist
+
+        // FIXME Task 1.1: create an array list of all possible locations - class definition
+        private ArrayList<Point> allLocations;
+
+        // FIXME Task 1.2: create method that given a placement string, removes a piece placement's location from the arraylist
 
         /** FIXME Task 2.1:
          * Given a placement, return an array list of points
          * @param placement a well-formed placement
          * @return an array list of points (all the locations that the placement covers)
          */
+        private ArrayList<Point> availableLocations(String placement) {
+            return null;
+        }
 
-        /** FIXME Task 2.2:
-         * Create methods that gets the x and y from the point
-         */
-
-        /** FIXME TASK 2.3:
+        /** FIXME TASK 2.2: Maybe don't need this on second thought
          * Given an array list of points on the board (from task 2.1), create a new array list
          * that takes these points away from the arraylist in task 1 (class definition)
          * @param points list of points on the board
-         * @return original arraylist take away the locations of placements on the board (return arraylist including only locations that are not covered)
+         * @return arraylist including only locations that are not covered)
          */
+        private ArrayList<Point> removeLocations(ArrayList<Point> points) {
+            return null;
+        }
 
         /** FIXME TASK 3:
          * This will return a badly formed solution string
          *
          * Start from the top left of the challenge square using getViablePiecePlacementsOnCell
          * Add piece placement to string
-         * (Use task 2.3 method) make a temporary arraylist that includes all locations not covered by that piece
-         * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location (using 2.2 get x and y methods)
+         * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by that piece
+         * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location
          * Add piece placement to string
-         * (Use task 2.3 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
+         * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
          * Keep on going until you get an empty arraylist. Then return the string
-         *
          */
+        public static String getBadSolution(String challenge) {
+
+            return null;
+        }
 
         /** FIXME TASK 4:
          * Order the placement sequence by piece IDs
          *
+         *
          * Use the task 3 placement and order it
          */
+        public static String orderSolution(String placement) {
+            return null;
+        }
 
         /** FIXME TASK 4.1:
          * Use string from task 4
          *
+         * Return the string where:
          * If a piece exhibits rotational symmetry, only return the lowest
          * orientation value (0 or 1)
          *
@@ -722,6 +739,9 @@ public class FocusGame {
          * if f's or g's orientation is 2, make it 0
          * if f's or g's orientation is 3, make it 1
          */
+        public static String rotationalSymmetry(String placement) {
+            return null;
+        }
 
 
 
@@ -741,8 +761,7 @@ public class FocusGame {
         // feed in my task 6 code with the first location in the list on loop until location list is empty
         // if location list is not empty and the piece list is empty, loop and make sure to appropriately reset the two array lists.
 
-        return null;
-    }
+
 
 }
 
