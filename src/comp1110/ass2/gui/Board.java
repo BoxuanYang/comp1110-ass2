@@ -453,7 +453,7 @@ public class Board extends Application {
     public void placeStart(String objective) {
         for(int i = 0; i < objective.length(); i++){
             char piece = Character.toLowerCase(objective.charAt(i));
-            Image image = new Image(Viewer.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
+            Image image = new Image(Board.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
             ImageView iv1 = new ImageView();
             iv1.setImage((image));
             root.getChildren().add(iv1);

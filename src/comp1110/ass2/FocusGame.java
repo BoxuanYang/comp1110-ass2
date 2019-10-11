@@ -437,6 +437,7 @@ public class FocusGame {
     }
 
 
+
     /**The author of this method is Boxuan Yang.
      * Given a placement string and a pice placement string, return true if the pice placement does not
      * overlap with the placement string and false otherwise. We can assume the piece is not included in
@@ -655,7 +656,7 @@ public class FocusGame {
         return placements;
     }
 
-    /**
+    /**The author of this method is Apoorva Sajja, Nicole Wang and Boxuan Yang
      * Return the canonical encoding of the solution to a particular challenge.
      * <p>
      * A given challenge can only solved with a single placement of pieces.
@@ -673,95 +674,129 @@ public class FocusGame {
      */
     public static String getSolution(String challenge) {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
-
-        return null;
+        String solution_to_be_ordered = getBadSolution(challenge);
+        String ordered_solution = orderSolution(solution_to_be_ordered);
+        return ordered_solution;
     }
 
 
-        // FIXME Task 1.1: create an array list of all possible locations - class definition
-        private ArrayList<Point> allLocations;
+    // FIXME Task 1.1: create an array list of all possible locations - class definition
+    private ArrayList<Point> allLocations;
 
-        // FIXME Task 1.2: create method that given a placement string, removes a piece placement's location from the arraylist
+    // FIXME Task 1.2: create method that given a placement string, removes a piece placement's location from the arraylist
 
-        /** FIXME Task 2.1:
-         * Given a placement, return an array list of points
-         * @param placement a well-formed placement
-         * @return an array list of points (all the locations that the placement covers)
-         */
-        private ArrayList<Point> availableLocations(String placement) {
-            return null;
+    /** FIXME Task 2.1:
+     * Given a placement, return an array list of points that this placement covers
+     * @param placement a well-formed placement
+     * @return an array list of points (all the locations that the placement covers)
+     */
+    public static ArrayList<Point> availableLocations(String placement) {
+        ArrayList<Point> locations = new ArrayList<>(43);
+        //the number of pieces
+        int n = placement.length() / 4;
+        //Find the available squares for each piece.
+        for(int i = 0; i < n; i++){
+            String piece = placement.substring(4 * i, 4 * i + 4);
+            int x = piece.charAt(1) - '0';
+            int y = piece.charAt(2) - '0';
+            int width = getWidth(piece);
+            int height = getHeight(piece);
+            //loop through every piece
+            for(int xoff = x; xoff < width; xoff++){
+                for(int yoff = y; yoff < height; yoff++){
+                    State s = getState(piece, xoff, yoff);
+                    //Add it to the ArrayList if the square is not null
+                    if(s != null){
+                        locations.add(new Point(x + xoff, y + yoff));
+                    }
+                }
+            }
         }
 
-        /** FIXME TASK 2.2: Maybe don't need this on second thought
-         * Given an array list of points on the board (from task 2.1), create a new array list
-         * that takes these points away from the arraylist in task 1 (class definition)
-         * @param points list of points on the board
-         * @return arraylist including only locations that are not covered)
-         */
-        private ArrayList<Point> removeLocations(ArrayList<Point> points) {
-            return null;
+        return locations;
+    }
+
+    /** FIXME TASK 2.2: Maybe don't need this on second thought
+     * Given an array list of points on the board (from task 2.1), create a new array list
+     * that takes these points away from the arraylist in task 1 (class definition)
+     * @param points list of points on the board
+     * @return arraylist including only locations that are not covered)
+     */
+    public static ArrayList<Point> complementLocations(ArrayList<Point> points){
+        ArrayList<Point> complement = new ArrayList(43);
+        //loop through every square on board
+        for(int x = 0; x < 9; x++){
+            for(int y = 0; y < 5; y++){
+                //continue the loop if it is (0,4) or (8,4)
+                if((x == 0 || x == 8) && y == 4){
+                    continue;
+                }
+
+                Point point = new Point(x, y);
+                //add it to the ArrayList complement if the point is not in points
+                if(!points.contains(point)){
+                    complement.add(point);
+                }
+            }
+        }
+        return complement;
+    }
+
+
+    /** FIXME TASK 3:
+     * This will return a badly formed solution string
+     * Start from the middle the challenge square using getViablePiecePlacementsOnCell(String placement, String challenge, int col, int row)
+     * Add piece placement to string
+     * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by that piece
+     * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location
+     * Add piece placement to string
+     * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
+     * Keep on going until you get an empty arraylist. Then return the string
+     */
+    public static String getBadSolution(String challenge) {
+        String solution = "";
+        return null;
+    }
+
+    /**
+     * Given a placement string, return true if there is no way to continue the game
+     * on the basis of current placement.
+     * @param placement A placement string
+     * @return
+     */
+    public boolean isPlacementDead(String placement){
+        return true;
+    }
+    /** FIXME TASK 4:
+     * Given a solution string, order the placement sequence by piece IDs.
+     * Ordering rules:
+     *   Order by piece ID.
+     *   If a piece exhibits rotational symmetry, only return the lowest orientation value (0 or 1).
+     * Use the task 3 placement and order it
+     */
+    public static String orderSolution(String placement) {
+        String[] ordered = new String[10];
+        for(int i = 0; i < 10; i++){
+            String str = placement.substring(4* i, 4 * i + 4);
+            char piece = str.charAt(0);
+            int index = piece - 97;
+            if(piece == 'g' || piece == 'f'){
+                int ori = str.charAt(3) - '0';
+                ori %= 2;
+                str = ""  + str.charAt(0) + str.charAt(1) + str.charAt(2) + (char)(ori + '0');
+                ordered[index] = str;
+            }
+
+            else
+                ordered[index] = str;
         }
 
-        /** FIXME TASK 3:
-         * This will return a badly formed solution string
-         *
-         * Start from the top left of the challenge square using getViablePiecePlacementsOnCell
-         * Add piece placement to string
-         * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by that piece
-         * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location
-         * Add piece placement to string
-         * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
-         * Keep on going until you get an empty arraylist. Then return the string
-         */
-        public static String getBadSolution(String challenge) {
-
-            return null;
+        String order = "";
+        for(int i = 0; i < 10; i++){
+            order += ordered[i];
         }
-
-        /** FIXME TASK 4:
-         * Order the placement sequence by piece IDs
-         *
-         *
-         * Use the task 3 placement and order it
-         */
-        public static String orderSolution(String placement) {
-            return null;
-        }
-
-        /** FIXME TASK 4.1:
-         * Use string from task 4
-         *
-         * Return the string where:
-         * If a piece exhibits rotational symmetry, only return the lowest
-         * orientation value (0 or 1)
-         *
-         * Account for the case of f and g
-         * if f's or g's orientation is 2, make it 0
-         * if f's or g's orientation is 3, make it 1
-         */
-        public static String rotationalSymmetry(String placement) {
-            return null;
-        }
-
-
-
-
-
-
-        // Task 2: create an array list of possible pieces
-
-
-        // Task 3:
-
-        // start from top left of challenge square using getViablePiecePlacementsOnCell (my task 6)
-
-        // remove the locations that the tiles cover that are placed - need method to create an arrayList of all locations a given placement covers
-        // when a piece is used, remove it from the array list
-        // only add a piece if it is present in the array list
-        // feed in my task 6 code with the first location in the list on loop until location list is empty
-        // if location list is not empty and the piece list is empty, loop and make sure to appropriately reset the two array lists.
-
-
+        return order;
+    }
 
 }
 
