@@ -351,6 +351,8 @@ public class Board extends Application {
             rotate();
             setLayoutX(X);
             setLayoutY(Y);
+            System.out.println("returned to: "+getLayoutX()+" and "+getLayoutY());
+            System.out.println(getX()+getY());
         }
 
         /**
