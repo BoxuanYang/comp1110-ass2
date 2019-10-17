@@ -40,7 +40,6 @@ class:
 # you want to just submit classes):
 method:
    - isPiecePlacementWellFormed
-   - 
 
 # sign *your* name and uid here
 name: Apoorva Sajja
