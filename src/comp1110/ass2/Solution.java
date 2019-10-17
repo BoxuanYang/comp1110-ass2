@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Solution {
   public String objective;
-  String placement;
+  public String placement;
   Set<String> placements;
 
   Solution(String iObjective, String p1, String p2, String p3, String p4) {

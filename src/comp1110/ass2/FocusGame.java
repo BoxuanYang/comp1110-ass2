@@ -719,17 +719,22 @@ public class FocusGame {
     public static void buildSolutionTree(TreeNode initialNode, String challenge) {
         Point point = getAdjacentEmptySquare(initialNode.placement);
 
+        if(point == null){
+            return;
+        }
 
-
+        //getViablePiecePlacement would return null if no piece could cover (x, y)
         Set<String> possibleMoves = getViablePiecePlacements(initialNode.placement, challenge, point.x, point.y);
-        
+        if(possibleMoves == null){
+            return;
+        }
 
         for(String piece : possibleMoves){
             TreeNode child = new TreeNode(initialNode.placement + piece);
             initialNode.addChild(child);
             buildSolutionTree(child, challenge);
         }
-        return;
+
     }
 
     /**
@@ -745,7 +750,7 @@ public class FocusGame {
 
         else {
             for (TreeNode child : solutionTree.children) {
-                getSolution(child);
+                return "" + getSolution(child);
             }
         }
         return "";
@@ -779,6 +784,10 @@ public class FocusGame {
                 }
             }
 
+        }
+
+        if(locations.size() == 0){
+            return null;
         }
 
         return locations;
@@ -864,6 +873,9 @@ public class FocusGame {
     public static Point getAdjacentEmptySquare(String placement){
         ArrayList<Point> squaresCovered = coveredLocations(placement);
         ArrayList<Point> squaresNotCovered = notCoveredLocations(placement);
+
+
+
         for(Point point : squaresCovered){
             int x = point.x;
             int y = point.y;

@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -28,17 +27,18 @@ public class Board extends Application {
     private static final int BOARD_HEIGHT = 700;
 
     // playable board layout
-    private static final int SQUARE_SIZE = 60;
+    private static final int SQUARE_SIZE = 55;
 
     // playable board position
-    private static final int MARGIN_X = 45;
+    private static final int MARGIN_X = 60;
     private static final int MARGIN_Y = 45;
 
-    private static final int PIECE_START_Y = SQUARE_SIZE;
-    private static final int PIECE_START_X = 30;
+    private static final int PIECE_START_Y = SQUARE_SIZE + 30;
+    private static final int PIECE_START_X = 45;
 
 
-    private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE;
+    private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE + 15;
+    private static final int BOARD_START_Y = -SQUARE_SIZE/2;
     private static final int BOARD_END_X = BOARD_WIDTH - MARGIN_X;
     private static final int BOARD_END_Y = MARGIN_Y + SQUARE_SIZE * 5;
 
@@ -63,9 +63,12 @@ public class Board extends Application {
     private final Group root = new Group();
     private final Group bpieces = new Group();
     private final Group board = new Group();
+    private final Group challenges = new Group();
     //The author of the above code is Nicole Wang.
 
-
+    /** the author of this method is Nicole Wang
+     * Builds the board
+     */
     private void board() {
         Image img = new Image(Board.class.getResource(URI_BASE + "board.png").toString());
         ImageView iv = new ImageView();
@@ -73,7 +76,7 @@ public class Board extends Application {
         iv.setFitHeight(6.7*SQUARE_SIZE);
         iv.setFitWidth(10.25*SQUARE_SIZE);
         iv.setX(BOARD_START_X-0.6*SQUARE_SIZE);
-        iv.setY(-SQUARE_SIZE/2);
+        iv.setY(BOARD_START_Y);
         board.getChildren().add(iv);
     }
 
@@ -348,6 +351,8 @@ public class Board extends Application {
             rotate();
             setLayoutX(X);
             setLayoutY(Y);
+            System.out.println("returned to: "+getLayoutX()+" and "+getLayoutY());
+            System.out.println(getX()+getY());
         }
 
         /**
@@ -423,8 +428,8 @@ public class Board extends Application {
             }
         });
         controls.getChildren().add(button);
-        button.setLayoutX(MARGIN_X);
-        button.setLayoutY(MARGIN_Y);
+        button.setLayoutX(10);
+        button.setLayoutY(10);
     }
 
     /** The author of this method is Nicole Wang
@@ -439,6 +444,8 @@ public class Board extends Application {
         placement = "";
     }
 
+    String challenge = startPlacement();
+
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
@@ -451,14 +458,36 @@ public class Board extends Application {
 
     // TASK 8: add the startPlacement to the board
     public void placeStart(String objective) {
-        for(int i = 0; i < objective.length(); i++){
+        for (int i = 0; i < objective.length(); i++) {
             char piece = Character.toLowerCase(objective.charAt(i));
             Image image = new Image(Board.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
             ImageView iv1 = new ImageView();
             iv1.setImage((image));
-            root.getChildren().add(iv1);
+
+            // set to correct size
+            iv1.setFitHeight(SQUARE_SIZE);
+            iv1.setFitWidth(SQUARE_SIZE);
+
+            // x coordinate for challenge squares
+            if (i < 3) {
+                iv1.setX(BOARD_START_X + 3 * SQUARE_SIZE + SQUARE_SIZE * i);
+            } else {
+                iv1.setX(BOARD_START_X + 3 * SQUARE_SIZE + SQUARE_SIZE * ((i) % 3));
+            }
+
+            // y coordinate for challenge squares
+            if (i < 3) {
+                    iv1.setY(MARGIN_Y + SQUARE_SIZE);
+            } else if (i < 6) {
+                    iv1.setY(MARGIN_Y + SQUARE_SIZE * 2);
+            } else if (i < 9) {
+                    iv1.setY(MARGIN_Y + SQUARE_SIZE * 3);
+            }
+
+            challenges.getChildren().add(iv1);
+            }
+
         }
-    }
 
 
     // TASK 8: return a solution for the game
@@ -471,6 +500,28 @@ public class Board extends Application {
 
         }
         return solution.getPlacement();
+    }
+
+    /** The author of this method is Nicole Wang
+     * Creates a button that shows/hides the challenge */
+    private void ChallengeButton() {
+        Button button = new Button("Hide/Show Challenge");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // show challenge if challenge is not on the board
+                if(!root.getChildren().contains(challenges)) {
+                    root.getChildren().add(challenges);
+                    bpieces.toFront();
+                    // hide challenge if challenge is on the board
+                } else {
+                    root.getChildren().remove(challenges);
+                }
+            }
+        });
+        controls.getChildren().add(button);
+        button.setLayoutX(70);
+        button.setLayoutY(10);
     }
 
 
@@ -527,11 +578,20 @@ public class Board extends Application {
         makeTiles();
         // create reset button
         resetButton();
+        // place the challenge on the board in the beginning
+        placeStart(challenge);
+        // create button that hides/shows the challenge
+        ChallengeButton();
+
+       // placeStart(startPlacement());
+        System.out.println(challenge);
 
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
         root.getChildren().add(board);
+        root.getChildren().add(challenges);
         root.getChildren().add(controls);
         root.getChildren().add(bpieces);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
