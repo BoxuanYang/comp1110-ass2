@@ -33,8 +33,7 @@ collaboration:
 # (or remove it altogether if you haven't used any external code)
 code:
   - comment: We get some inspirations from past year's assignment 2 and a stackOverFlow question.
-    url: https://github.com/Aditya-B-Sharma/comp1110-assignment2-IQSteps/blob/master/src/comp1110/ass2/StepsGame.java?fbclid=IwAR3wCtYPk1XROj5qnVNmPYr0eVyh_uPSRK9Euc2Q6j_-lNlTkhZli1Mkyp4,
-    https://stackoverflow.com/questions/3522454/java-tree-data-structure
+    url: https://github.com/Aditya-B-Sharma/comp1110-assignment2-IQSteps/blob/master/src/comp1110/ass2/StepsGame.java?fbclid=IwAR3wCtYPk1XROj5qnVNmPYr0eVyh_uPSRK9Euc2Q6j_-lNlTkhZli1Mkyp4, https://stackoverflow.com/questions/3522454/java-tree-data-structure
     licence: .
 
 
