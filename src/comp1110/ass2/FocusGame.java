@@ -80,6 +80,7 @@ public class FocusGame {
             {GREEN, GREEN, WHITE, RED,//j
              GREEN, null,  null,  null}
     };
+
     
     /*
     The author of this method is Apoorva Sajja and Nicole Wang.

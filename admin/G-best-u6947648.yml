@@ -18,11 +18,9 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-#collaboration:
- # - name:
-  #  comment:
-  #- name:
-  #  comment:
+collaboration:
+  - name: Boxuan Yang and Apoorva Sajja
+    comment: Discussed design choices and collaborated
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -31,6 +29,10 @@ declaration: >-
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
+code:
+  - comment: Got inspiration and used some code from the 2019 comp1110 assignment1 for the Draggable Piece class structure and some of its methods
+    url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1
+    licence: .
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
@@ -40,9 +42,9 @@ class:
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
-#method:
+method:
+  - isPlacementStringWellFormed()
    #-
-   #- 
 
 # sign *your* name and uid here
 name: Nicole Wang
