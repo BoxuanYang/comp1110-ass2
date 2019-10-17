@@ -8,6 +8,6 @@ of our project implements the following features:
  X A basic playable game that snaps pieces to the board and checks for validity (Task 7)
  X Generates simple challenges (Task 8)
  X Implements hints (Task 10)
- - Implements interesting starting challenges (Task 11)
+ 
 
 additional features...
