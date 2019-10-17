@@ -9,7 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -504,7 +506,7 @@ public class Board extends Application {
 
     /** The author of this method is Nicole Wang
      * Creates a button that shows/hides the challenge */
-    private void ChallengeButton() {
+    private void challengeButton() {
         Button button = new Button("Hide/Show Challenge");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -526,6 +528,60 @@ public class Board extends Application {
 
 
     // FIXME Task 10: Implement hints
+
+    // game solution to the challenge
+//    private String gameSolution = getSolution(challenge);
+
+    // gets an appropriate hint according to the pieces the user has already placed on the board
+ /*   private String getHints() {
+        String solution = gameSolution;
+        int n = solution.length();
+        for(int i=0; i<n; i=i+4) {
+            if(isPlacementStringValid(placement+gameSolution)) {
+                return placement + gameSolution;
+            }
+        }
+        return null;
+    }
+    */
+
+    /** The author of this method is Nicole Wang
+     * Creates a hint button */
+    private void hintButton() {
+        Button button = new Button("Hint");
+
+        // when user presses the hint button, display a possible hint on the board
+        button.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+            @Override
+                    public void handle(MouseEvent e) {
+                System.out.println("Mouse entered");
+           //     getHints();
+
+            }
+
+                });
+
+        // when user lets go of the hint button, remove the hint
+        button.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        System.out.println("Mouse exited");
+                    }
+
+                });
+
+        controls.getChildren().add(button);
+        System.out.println("hint button added");
+        button.setLayoutX(225);
+        button.setLayoutY(10);
+        }
+
+    // hint button that the user must press to get a piece
+    // if user lets go, the hint will disappear
+    // according to the pieces the user has already put down, give a hint
+    // if board is full do nothing
 
     // TASK 10: get possible piece placements for the next move
     public String getPossiblePlacements() {
@@ -581,7 +637,9 @@ public class Board extends Application {
         // place the challenge on the board in the beginning
         placeStart(challenge);
         // create button that hides/shows the challenge
-        ChallengeButton();
+        challengeButton();
+        // create hint button
+        hintButton();
 
        // placeStart(startPlacement());
         System.out.println(challenge);
