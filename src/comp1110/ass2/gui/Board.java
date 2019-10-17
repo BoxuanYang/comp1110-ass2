@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,7 +21,7 @@ import static comp1110.ass2.Solution.SOLUTIONS;
 import static comp1110.ass2.gui.Viewer.*;
 import static comp1110.ass2.FocusGame.*;
 
-
+// This class was written by Nicole Wang
 public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Focus Game in JavaFX that only allows pieces to be placed in valid places
@@ -35,10 +37,11 @@ public class Board extends Application {
     private static final int MARGIN_X = 60;
     private static final int MARGIN_Y = 45;
 
+    // positions for the starting positions of pieces on the board
     private static final int PIECE_START_Y = SQUARE_SIZE + 30;
     private static final int PIECE_START_X = 45;
 
-
+    // Board positions
     private static final int BOARD_START_X = MARGIN_X * 2 + 4 * SQUARE_SIZE + 15;
     private static final int BOARD_START_Y = -SQUARE_SIZE/2;
     private static final int BOARD_END_X = BOARD_WIDTH - MARGIN_X;
@@ -49,6 +52,8 @@ public class Board extends Application {
 
 
     private static final String URI_BASE = "assets/";
+
+    // Variables
 
     // placement containing all pieces on board
     private String placement = "";
@@ -66,25 +71,64 @@ public class Board extends Application {
     private final Group bpieces = new Group();
     private final Group board = new Group();
     private final Group challenges = new Group();
+    private final Group hint = new Group();
     //The author of the above code is Nicole Wang.
+
+    // challenge of the game
+    String challenge = startPlacement();
+
+    // game solution to the challenge
+    private String gameSolution = gameSolution(challenge);
+
+    // The definitions below correspond to the layout of the pieces when displayed in the game at their home state
+    //the row location of each piece where index 0 is a, 1 is b, etc.
+    int[] rows = {3, 3, 1, 4, 4, 4, 4, 3, 3, 2};
+    //the column location of each piece where index 0 is a, 1 is b, etc.
+    int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
+    //The author of the above arrays is Nicole Wang.
+
+
+    // The following methods extract information from a piece string
+    public char getPiece(String piece) {
+        return piece.charAt(0);
+    }
+
+    public int getOrientation(String piece) {
+        return piece.charAt(3)-48;
+    }
+
+    public int getX(String piece) {
+        return piece.charAt(1) - 48;
+    }
+
+    public int getY(String piece) {
+        return piece.charAt(2) - 48;
+    }
 
     /** the author of this method is Nicole Wang
      * Builds the board
      */
     private void board() {
+        // obtain board image
         Image img = new Image(Board.class.getResource(URI_BASE + "board.png").toString());
         ImageView iv = new ImageView();
         iv.setImage(img);
+
+        // set to appropriate size
         iv.setFitHeight(6.7*SQUARE_SIZE);
         iv.setFitWidth(10.25*SQUARE_SIZE);
+
+        // set to appropriate location
         iv.setX(BOARD_START_X-0.6*SQUARE_SIZE);
         iv.setY(BOARD_START_Y);
+
+        // add to node group
         board.getChildren().add(iv);
     }
 
     /**
      * The author of this method is Nicole Wang
-     * returns y location for a piece in a given row
+     * returns y location for a piece in a given row for the home starting position
      */
     private int rowPosition(int row) {
         return PIECE_START_Y + MARGIN_Y * (row-1) + SQUARE_SIZE * (2 * (row - 1));
@@ -92,7 +136,7 @@ public class Board extends Application {
 
     /**
      * The author of this method is Nicole Wang
-     * returns x location for each piece in a given column
+     * returns x location for each piece in a given column for the home starting position
      */
     private int colPosition(int col) {
         int margins = PIECE_START_X + MARGIN_X * (col-1);
@@ -108,12 +152,6 @@ public class Board extends Application {
         }
         return margins;
     }
-
-    //the row location of each piece where index 0 is a, 1 is b, etc.
-    int[] rows = {3, 3, 1, 4, 4, 4, 4, 3, 3, 2};
-    //the column location of each piece where index 0 is a, 1 is b, etc.
-    int[] cols = {1, 2, 1, 3, 1, 4, 2, 4, 3, 1};
-    //The author of the above arrays is Nicole Wang.
 
 
     /**
@@ -162,9 +200,9 @@ public class Board extends Application {
         double mouseX, mouseY; // last known mouse positions
         int orientation; // piece orientation
         char piece; // piece type
-        Image img;
-        int width;
-        int height;
+        Image img; // image of the piece
+        int width; // width of the piece
+        int height; // piece height
 
         /**
          * The author of this method is Nicole Wang
@@ -172,14 +210,14 @@ public class Board extends Application {
          **/
         DraggablePiece(char piece) {
             this.piece = piece;
-            // creates image of piece
+            // obtains image of piece
             img = new Image(Board.class.getResource(URI_BASE + piece + ".png").toString());
             setImage(img);
 
             // initial piece orientation
             orientation = 0;
 
-            // Sets the initial position of the piece
+            // variables for piece's home starting positions
             X = colPosition(cols[piece - 'a']);
             Y = rowPosition(rows[piece - 'a']);
 
@@ -190,6 +228,8 @@ public class Board extends Application {
             if (piece == 'f') {
                 Y = Y + SQUARE_SIZE;
             }
+
+            // set piece's home starting position
             setLayoutX(X);
             setLayoutY(Y);
 
@@ -208,11 +248,15 @@ public class Board extends Application {
             });
             // track mouse movement as it is being dragged
             setOnMouseDragged(event -> {
+                // make piece being moved at the front
                 toFront();
+                // track how much the piece has moved from where it was first dragged
                 double movementX = event.getSceneX() - mouseX;
                 double movementY = event.getSceneY() - mouseY;
+                // set new position
                 setLayoutX(getLayoutX() + movementX);
                 setLayoutY(getLayoutY() + movementY);
+                // updates position of mouse
                 mouseX = event.getSceneX();
                 mouseY = event.getSceneY();
                 event.consume();
@@ -222,11 +266,14 @@ public class Board extends Application {
                 snapToGrid();
             });
 
-            /* event handlers */
-            setOnScroll(event -> {            // scroll to change orientation
+            // setOnScroll event taken from comp1110 assignment 1
+            // rotates the piece when scrolled
+            setOnScroll(event -> {
                 if (System.currentTimeMillis() - lastRotationTime > ROTATION_THRESHOLD) {
                     lastRotationTime = System.currentTimeMillis();
+                    // update orientation
                     orientation = (orientation + 1) % 4;
+                    // rotate the piece
                     rotate();
                     event.consume();
                 }
@@ -239,10 +286,12 @@ public class Board extends Application {
          * This method rotates the image of the piece
          */
         private void rotate() {
+            // update piece's width and height
             setFitWidth(getSquaresOfWidth(piece, orientation) * SQUARE_SIZE);
             setFitHeight(getSquaresOfHeight(piece, orientation) * SQUARE_SIZE);
+            // bring piece being rotated to the front
             toFront();
-            // turn piece character into corresponding arraylist (pieces) index
+            // rotate piece by 90 degrees clockwise
             int p = piece - 97;
             pieces.get(p).setRotate(orientation * 90);
         }
@@ -280,21 +329,23 @@ public class Board extends Application {
         private void snapToGrid() {
             // find nearest x grid or snap to home if not on board
             if (onBoard()) {
+                // closest column and row to the current piece
                 col = closestColumn();
                 row = closestRow();
 
-
+                // closest location on the board to the current piece
                 bx = (BOARD_START_X + (SQUARE_SIZE * col));
                 by = (MARGIN_Y + (SQUARE_SIZE * row));
 
-                // shift snapping position for pieces of width 3 (gets rid of a bug that makes these pieces not in line with the board)
+                // shift snapping position for pieces of width 3 and height 2 to offset rotation behaviour
                 if ((orientation == 1 || orientation == 3) && width == 3 && height == 2) {
                     bx = bx + SQUARE_SIZE / 2;
                     by = by + SQUARE_SIZE / 2;
                 }
+
             } else {
+                // if not on board, send the piece back home
                 snapToHome();
-                System.out.println("not on board");
             }
 
             // create temporary string of current pieces on the board
@@ -348,13 +399,14 @@ public class Board extends Application {
          * Snap tile back to home position (if not on the grid
          **/
         private void snapToHome() {
+            // remove piece being snapped home from the placement string containing all pieces on the board
             removeBoardState();
+            // set to orientation of 0
             orientation = 0;
             rotate();
+            // send back to home location
             setLayoutX(X);
             setLayoutY(Y);
-            System.out.println("returned to: "+getLayoutX()+" and "+getLayoutY());
-            System.out.println(getX()+getY());
         }
 
         /**
@@ -374,7 +426,9 @@ public class Board extends Application {
          * Updates the boardstates so that the current piece is updated
          */
         private void updateBoardStates() {
+            // remove piece being snapped home from the placement string containing all pieces on the board
             removeBoardState();
+            // add the current piece to the placement string
             placement = placement + currentState();
         }
 
@@ -404,14 +458,14 @@ public class Board extends Application {
         }
     }
 
-
-
     /**
-     * The author of this method is Nicole Wang
+     * This method was taken from the makeTiles() method of comp1110 assignment 1
      * place all tiles in their starting positions */
     ArrayList<DraggablePiece> pieces = new ArrayList<>();
-    private void makeTiles() {
+    private void makePieces() {
+        // clear all pieces in bpieces
         bpieces.getChildren().clear();
+        // create a draggable piece for pieces a-j
         for (char m = 'a'; m <= 'j'; m++) {
             pieces.add(new DraggablePiece(m));
             bpieces.getChildren().add(pieces.get(m-97));
@@ -422,20 +476,23 @@ public class Board extends Application {
     /** The author of this method is Nicole Wang
      * Create a button to reset all pieces back to original place */
     private void resetButton() {
+        // create reset button
         Button button = new Button("Reset");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                // send all pieces back home
             resetPieces();
             }
         });
         controls.getChildren().add(button);
+        // set button location
         button.setLayoutX(10);
         button.setLayoutY(10);
     }
 
     /** The author of this method is Nicole Wang
-     * reset all pieces */
+     * reset all pieces by sending them back to their home state */
     private void resetPieces() {
         // snap each piece back to home
         bpieces.toFront();
@@ -446,38 +503,37 @@ public class Board extends Application {
         placement = "";
     }
 
-    String challenge = startPlacement();
-
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
-    // TASK 8: get a starting placement from SOLUTIONS in TestUtility.Solution
+    // gets a starting placement from SOLUTIONS in TestUtility.Solution
     public String startPlacement() {
         Random random = new Random();
         int index = random.nextInt(120);
         return SOLUTIONS[index].objective;
     }
 
-    // TASK 8: add the startPlacement to the board
-    public void placeStart(String objective) {
-        for (int i = 0; i < objective.length(); i++) {
-            char piece = Character.toLowerCase(objective.charAt(i));
+    // adds the placement challenge to the board
+    public void placeStart(String challenge) {
+        for (int i = 0; i < challenge.length(); i++) {
+            // obtains image of one piece of the challenge
+            char piece = Character.toLowerCase(challenge.charAt(i));
             Image image = new Image(Board.class.getResource(URI_BASE + "sq-" + piece + ".png").toString());
             ImageView iv1 = new ImageView();
             iv1.setImage((image));
 
-            // set to correct size
+            // sets to correct size
             iv1.setFitHeight(SQUARE_SIZE);
             iv1.setFitWidth(SQUARE_SIZE);
 
-            // x coordinate for challenge squares
+            // x coordinate for challenge square
             if (i < 3) {
                 iv1.setX(BOARD_START_X + 3 * SQUARE_SIZE + SQUARE_SIZE * i);
             } else {
                 iv1.setX(BOARD_START_X + 3 * SQUARE_SIZE + SQUARE_SIZE * ((i) % 3));
             }
 
-            // y coordinate for challenge squares
+            // y coordinate for challenge square
             if (i < 3) {
                     iv1.setY(MARGIN_Y + SQUARE_SIZE);
             } else if (i < 6) {
@@ -492,12 +548,12 @@ public class Board extends Application {
         }
 
 
-    // TASK 8: return a solution for the game
-    public String gameSolution(String objective) {
+    // gets a solution that matches the challenge from SOLUTIONS in TestUtility.Solution
+    public String gameSolution(String challenge) {
         Solution solution = SOLUTIONS[0];
         for(int i = 0; i < 120; i++){
             solution = SOLUTIONS[i];
-            if(solution.objective.equals(objective))
+            if(solution.objective.equals(challenge))
                 return solution.getPlacement();
 
         }
@@ -515,90 +571,143 @@ public class Board extends Application {
                 if(!root.getChildren().contains(challenges)) {
                     root.getChildren().add(challenges);
                     bpieces.toFront();
-                    // hide challenge if challenge is on the board
                 } else {
+                    // remove challenge from the board if no existing challenge there
                     root.getChildren().remove(challenges);
                 }
             }
         });
         controls.getChildren().add(button);
+        // set button location
         button.setLayoutX(70);
         button.setLayoutY(10);
     }
 
 
-    // FIXME Task 10: Implement hints
-
-    // game solution to the challenge
-    private String gameSolution = getSolution(challenge);
-
     // gets an appropriate hint according to the pieces the user has already placed on the board
     private String getHints() {
-        String solution = gameSolution;
-        int n = solution.length();
+
+        int n = gameSolution.length();
         for(int i=0; i<n; i=i+4) {
-            if(isPlacementStringValid(placement+gameSolution)) {
-                return placement + gameSolution;
+            String solution = gameSolution.substring(i,i+4);
+            // if the solution piece can be added to the current pieces on the board and be valid, return that as the hint
+            if(isPlacementStringValid(placement+solution)) {
+                System.out.println(placement+solution);
+                return solution;
             }
         }
         return null;
     }
 
     private void displayHint(String piece) {
+        // remove any of the existing hints
+        hint.getChildren().removeAll();
 
-     //   img = new Image(Board.class.getResource(URI_BASE + piece + ".png").toString());
-     //   setImage(img);
+        // piece information
+        char p = getPiece(piece);
+        int o = getOrientation(piece);
+        int x = getX(piece);
+        int y = getY(piece);
+
+        // obtain appropriate piece image
+        Image img = new Image(Board.class.getResource(URI_BASE + p + ".png").toString());
+        ImageView iv = new ImageView(img);
+        hint.getChildren().add(iv);
+
+        // set image to correct orientation
+        iv.setRotate(o * 90);
+
+        // set image to correct size;
+        int width = getSquaresOfWidth(p, o);
+        int height = getSquaresOfHeight(p, o);
+        iv.setFitHeight(height*SQUARE_SIZE);
+        iv.setFitWidth(width*SQUARE_SIZE);
+
+        // variables for hint location
+        int setX = BOARD_START_X+(SQUARE_SIZE*x);
+        int setY = MARGIN_Y+(SQUARE_SIZE*y);
+
+        // Offset locations according to general piece shape when at orientation 1 or 3
+        if (o==1||o==3) {
+            if (width == 3 && height == 2) {
+                System.out.println((BOARD_START_X) + (SQUARE_SIZE * x) + (SQUARE_SIZE / 2));
+                setX = setX - (SQUARE_SIZE / 2);
+                setY = setY + SQUARE_SIZE / 2;
+            } else if ((height == 2 && width == 4) || (height == 1 && width == 3)) {
+                setX = setX - SQUARE_SIZE;
+                setY = setY + SQUARE_SIZE;
+            }
+        }
+
+        // set hint location
+        iv.setLayoutX(setX);
+        iv.setLayoutY(setY);
+
+        // add hint to root to display
+        if (!hint.getChildren().isEmpty()) {
+            root.getChildren().add(hint);
+        }
 
     }
-
 
     /** The author of this method is Nicole Wang
      * Creates a hint button */
     private void hintButton() {
+        // create hint button
         Button button = new Button("Hint");
 
         // when user presses the hint button, display a possible hint on the board
-        button.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
             @Override
                     public void handle(MouseEvent e) {
-                System.out.println("Mouse entered");
-           //     getHints();
+                String h = getHints();
+                if (h != null) {
+                    System.out.println(gameSolution);
+                    System.out.println(placement);
+                    System.out.println(getHints());
+                    displayHint(h);
+                } else { // if no possible hints left, outline the board with red
 
+                    // rectangle to outline the board
+                    Rectangle r = new Rectangle(BOARD_END_X-BOARD_START_X+1.6*SQUARE_SIZE,BOARD_END_Y-BOARD_START_Y+SQUARE_SIZE);
+
+                    // set colour of rectangle to dark red
+                    r.setFill(Color.INDIANRED);
+                    r.setArcHeight(SQUARE_SIZE*2);
+                    r.setArcWidth(SQUARE_SIZE*2);
+
+                    // rectangle to the correct position (outlining the board)
+                    r.setX(BOARD_START_X-SQUARE_SIZE);
+                    r.setY(BOARD_START_Y-SQUARE_SIZE/4);
+
+                    // add into the window
+                    hint.getChildren().add(r);
+                    root.getChildren().add(hint);
+
+                    // send to the back of all objects
+                    hint.toBack();
+                }
             }
 
                 });
 
         // when user lets go of the hint button, remove the hint
-        button.addEventHandler(MouseEvent.MOUSE_EXITED,
+        button.addEventHandler(MouseEvent.MOUSE_RELEASED,
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
-                        System.out.println("Mouse exited");
+                        // removes the hint
+                        hint.getChildren().clear();
+                        root.getChildren().remove(hint);
                     }
 
                 });
-
         controls.getChildren().add(button);
-        System.out.println("hint button added");
+        // sets button location
         button.setLayoutX(225);
         button.setLayoutY(10);
         }
-
-    // hint button that the user must press to get a piece
-    // if user lets go, the hint will disappear
-    // according to the pieces the user has already put down, give a hint
-    // if board is full do nothing
-
-    // TASK 10: get possible piece placements for the next move
-    public String getPossiblePlacements() {
-        return "";
-    }
-
-    // TASK 10:
-    public String implementHints() {
-        return "";
-    }
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
 
@@ -610,11 +719,6 @@ public class Board extends Application {
     // TASK 11: get a start placement randomly
     public String getStartPlacement(String difficulty) {
        return "";
-    }
-
-    //TASK 11: Finds solutions
-    public String findSolutions(String placement) {
-        return"";
     }
 
     //TASK 11: Checks if startPlacement has one solution
@@ -638,7 +742,7 @@ public class Board extends Application {
         // draw board
         board();
         // place all pieces on board
-        makeTiles();
+        makePieces();
         // create reset button
         resetButton();
         // place the challenge on the board in the beginning
@@ -647,6 +751,7 @@ public class Board extends Application {
         challengeButton();
         // create hint button
         hintButton();
+
 
        // placeStart(startPlacement());
         System.out.println(challenge);
