@@ -674,36 +674,108 @@ public class FocusGame {
      */
     public static String getSolution(String challenge) {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
-        String solution_to_be_ordered = getBadSolution(challenge);
-        String ordered_solution = orderSolution(solution_to_be_ordered);
-        return ordered_solution;
+        //This is the starting placements, build everything from (4,2)
+        ArrayList<String> initialPlacement = new ArrayList<>();
+        initialPlacement.addAll(getViablePiecePlacements("", challenge, 4, 2));
+
+        int n = initialPlacement.size();
+        TreeNode[] solutionTree = new TreeNode[n];
+        String [] solution = new String[n];
+
+        //Create a list of n TreeNode, n is the number of choices for (4, 0) whose root is a single piece placement at (4, 2)
+        for(int i = 0; i < n; i++){
+            String piece = initialPlacement.get(i);
+            solutionTree[i] = new TreeNode(piece);
+        }
+
+        for(int i = 0; i < n; i++){
+            buildSolutionTree(solutionTree[i], challenge);
+        }
+
+        for(int i = 0; i < n; i++){
+            solution[i] = getSolution(solutionTree[i]);
+            if(solution[i].length() == 40){
+                solution[i] = orderSolution(solution[i]);
+                return solution[i];
+            }
+        }
+
+        return "";
+
+
+
+
+
+
     }
 
+    /**
+     * Given an initial tree, an ArrayList locationsCovered, an ArrayList locationsNotCovered and a challenge string. Change
+     * the initial tree to a tree which contains a solution.
+     * @param initialNode initial tree
+     * @param challenge challenge string
+     * @return nothing
+     */
+    public static void buildSolutionTree(TreeNode initialNode, String challenge) {
+        Point point = getAdjacentEmptySquare(initialNode.placement);
 
-    // FIXME Task 1.1: create an array list of all possible locations - class definition
-    private ArrayList<Point> allLocations;
+        if(point == null){
+            return;
+        }
 
-    // FIXME Task 1.2: create method that given a placement string, removes a piece placement's location from the arraylist
+        //getViablePiecePlacement would return null if no piece could cover (x, y)
+        Set<String> possibleMoves = getViablePiecePlacements(initialNode.placement, challenge, point.x, point.y);
+        if(possibleMoves == null){
+            return;
+        }
 
-    /** FIXME Task 2.1:
+        for(String piece : possibleMoves){
+            TreeNode child = new TreeNode(initialNode.placement + piece);
+            initialNode.addChild(child);
+            buildSolutionTree(child, challenge);
+        }
+
+    }
+
+    /**
+     * Given a tree which contains a solution, return that solution placemenr string.
+     * We assume that the tree given already contains a solution.
+     * @param solutionTree a tree which contains a solution
+     * @return a placement string
+     */
+    public static String getSolution(TreeNode solutionTree) {
+        if (solutionTree.placement.length() == 40) {
+            return solutionTree.placement;
+        }
+
+        else {
+            for (TreeNode child : solutionTree.children) {
+                return "" + getSolution(child);
+            }
+        }
+        return "";
+    }
+
+    /**
      * Given a placement, return an array list of points that this placement covers
      * @param placement a well-formed placement
      * @return an array list of points (all the locations that the placement covers)
      */
-    public static ArrayList<Point> availableLocations(String placement) {
-        ArrayList<Point> locations = new ArrayList<>(43);
+    public static ArrayList<Point> coveredLocations(String placement) {
+        ArrayList<Point> locations = new ArrayList<>();
         //the number of pieces
         int n = placement.length() / 4;
         //Find the available squares for each piece.
+        String piece = "";
         for(int i = 0; i < n; i++){
-            String piece = placement.substring(4 * i, 4 * i + 4);
+            piece = placement.substring(4 * i, 4 * i + 4);
             int x = piece.charAt(1) - '0';
             int y = piece.charAt(2) - '0';
             int width = getWidth(piece);
             int height = getHeight(piece);
             //loop through every piece
-            for(int xoff = x; xoff < width; xoff++){
-                for(int yoff = y; yoff < height; yoff++){
+            for(int xoff = 0; xoff < width; xoff++){
+                for(int yoff = 0; yoff < height; yoff++){
                     State s = getState(piece, xoff, yoff);
                     //Add it to the ArrayList if the square is not null
                     if(s != null){
@@ -711,19 +783,25 @@ public class FocusGame {
                     }
                 }
             }
+
+        }
+
+        if(locations.size() == 0){
+            return null;
         }
 
         return locations;
     }
 
-    /** FIXME TASK 2.2: Maybe don't need this on second thought
-     * Given an array list of points on the board (from task 2.1), create a new array list
-     * that takes these points away from the arraylist in task 1 (class definition)
-     * @param points list of points on the board
-     * @return arraylist including only locations that are not covered)
+
+    /**
+     * Given a placement string, return an ArrayList of all the locations not covered by it.
+     * @param  placement String
+     * @return an arraylist including only locations that are not covered)
      */
-    public static ArrayList<Point> complementLocations(ArrayList<Point> points){
-        ArrayList<Point> complement = new ArrayList(43);
+    public static ArrayList<Point> notCoveredLocations(String placement){
+        ArrayList<Point> points = coveredLocations(placement);
+        ArrayList<Point> complement = new ArrayList();
         //loop through every square on board
         for(int x = 0; x < 9; x++){
             for(int y = 0; y < 5; y++){
@@ -739,35 +817,24 @@ public class FocusGame {
                 }
             }
         }
+
+        if(complement.size() == 0){
+            return null;
+        }
         return complement;
     }
 
+    public static void toStringAndPrint(ArrayList<Point> points){
+        for(Point point : points){
+            int x = point.x;
+            int y = point.y;
+            System.out.println("(" + x + ", " + y + ")" + ", ");
+        }
 
-    /** FIXME TASK 3:
-     * This will return a badly formed solution string
-     * Start from the middle the challenge square using getViablePiecePlacementsOnCell(String placement, String challenge, int col, int row)
-     * Add piece placement to string
-     * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by that piece
-     * Run getViablePiecePlacementsonCell with the first element in the temporary arraylist as the location
-     * Add piece placement to string
-     * (Use task 2.2 method) make a temporary arraylist that includes all locations not covered by the all the pieces.
-     * Keep on going until you get an empty arraylist. Then return the string
-     */
-    public static String getBadSolution(String challenge) {
-        String solution = "";
-        return null;
+
     }
 
     /**
-     * Given a placement string, return true if there is no way to continue the game
-     * on the basis of current placement.
-     * @param placement A placement string
-     * @return
-     */
-    public boolean isPlacementDead(String placement){
-        return true;
-    }
-    /** FIXME TASK 4:
      * Given a solution string, order the placement sequence by piece IDs.
      * Ordering rules:
      *   Order by piece ID.
@@ -796,6 +863,57 @@ public class FocusGame {
             order += ordered[i];
         }
         return order;
+    }
+
+    /**
+     * Given a placement string, return a Point which is adjacent to the exsisting placement and is empty.
+     * @param placement a placement string
+     * @return a point
+     */
+    public static Point getAdjacentEmptySquare(String placement){
+        ArrayList<Point> squaresCovered = coveredLocations(placement);
+        ArrayList<Point> squaresNotCovered = notCoveredLocations(placement);
+
+
+
+        for(Point point : squaresCovered){
+            int x = point.x;
+            int y = point.y;
+            if(squaresNotCovered.contains(new Point(x - 1, y))){
+                return new Point(x - 1, y);
+            }
+
+            if(squaresNotCovered.contains(new Point(x + 1, y))){
+                return new Point(x + 1, y);
+            }
+
+            if(squaresNotCovered.contains(new Point(x, y - 1))){
+                return new Point(x, y - 1);
+            }
+
+            if(squaresNotCovered.contains(new Point(x, y + 1))){
+                return new Point(x, y + 1);
+            }
+
+            if(squaresNotCovered.contains(new Point(x + 1, y + 1))){
+                return new Point(x + 1, y + 1);
+            }
+
+            if(squaresNotCovered.contains(new Point(x + 1, y - 1))){
+                return new Point(x + 1, y - 1);
+            }
+
+            if(squaresNotCovered.contains(new Point(x - 1, y + 1))){
+                return new Point(x - 1, y + 1);
+            }
+
+            if(squaresNotCovered.contains(new Point(x - 1, y - 1))){
+                return new Point(x - 1, y - 1);
+            }
+        }
+
+        //return null if no adajacent suqare is empty
+        return null;
     }
 
 }
