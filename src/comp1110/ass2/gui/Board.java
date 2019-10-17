@@ -483,6 +483,7 @@ public class Board extends Application {
             public void handle(ActionEvent e) {
                 // send all pieces back home
             resetPieces();
+
             }
         });
         controls.getChildren().add(button);
@@ -506,6 +507,7 @@ public class Board extends Application {
 
     // FIXME Task 8: Implement challenges (you may use challenges and assets provided for you in comp1110.ass2.gui.assets: sq-b.png, sq-g.png, sq-r.png & sq-w.png)
 
+    //The author of this method is Nicole Wang
     // gets a starting placement from SOLUTIONS in TestUtility.Solution
     public String startPlacement() {
         Random random = new Random();
@@ -513,6 +515,7 @@ public class Board extends Application {
         return SOLUTIONS[index].objective;
     }
 
+    //The author of this method is Nicole Wang
     // adds the placement challenge to the board
     public void placeStart(String challenge) {
         for (int i = 0; i < challenge.length(); i++) {
@@ -547,7 +550,7 @@ public class Board extends Application {
 
         }
 
-
+        //The author of this method is Nicole wang
     // gets a solution that matches the challenge from SOLUTIONS in TestUtility.Solution
     public String gameSolution(String challenge) {
         Solution solution = SOLUTIONS[0];
@@ -584,6 +587,7 @@ public class Board extends Application {
     }
 
 
+    //The author of this method is Nicole Wang
     // gets an appropriate hint according to the pieces the user has already placed on the board
     private String getHints() {
 
@@ -599,6 +603,7 @@ public class Board extends Application {
         return null;
     }
 
+    //The author of this method is Nicole Wang
     private void displayHint(String piece) {
         // remove any of the existing hints
         hint.getChildren().removeAll();

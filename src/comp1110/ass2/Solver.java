@@ -13,6 +13,7 @@ public class Solver {
 
 
     /**The author of this method is Apoorva Sajja, Nicole Wang and Boxuan Yang
+     *
      * Return the canonical encoding of the solution to a particular challenge.
      * <p>
      * A given challenge can only solved with a single placement of pieces.
@@ -31,30 +32,37 @@ public class Solver {
     public static String getSolution() {
         // FIXME Task 9: determine the solution to the game, given a particular challenge
         String mySolution = "";
+        //get an ArrayList with all possible moves for getViablePiecePlacements("", challenge, 4, 2)
         ArrayList<String> firstMoves = new ArrayList<>();
         firstMoves.addAll(getViablePiecePlacements("", challenge, 4, 2));
 
         int n = firstMoves.size();
 
+        //create an array of trees whose root correspond to the elements in firstMoves
         TreeNode[] solutionTree = new TreeNode[n];
         for(int i = 0; i < n; i++){
             solutionTree[i] = new TreeNode(firstMoves.get(i));
             buildSolutionTree(solutionTree[i], challenge);
             ArrayList<String> solutionList = new ArrayList<>();
             getSolutionFromTree(solutionTree[i], solutionList);
+
             if(solutionList.size() != 0){
                 mySolution = solutionList.get(0);
+                break;
             }
         }
 
+        //order the solution
         mySolution = orderSolution(mySolution);
 
         return mySolution;
 
     }
 
-    /**
-     * Given an initial tree, an ArrayList locationsCovered, an ArrayList locationsNotCovered and a challenge string. Change
+    /**The author of this method is Boxuan Yang, with inspirations from:
+     * https://github.com/Aditya-B-Sharma/comp1110-assignment2-IQSteps/blob/master/src/comp1110/ass2/StepsGame.java?fbclid=IwAR0PN5OIKSRrhXatyN6khlMgzCTVw4_PaHbX4hxs3amdrB3QyUHBaJC_DrM
+     *
+     * Given an initial tree, an ArrayList locationsCovered and a challenge string. Change
      * the initial tree to a tree which contains a solution.
      * @param initialNode initial tree
      * @param challenge challenge string
@@ -69,7 +77,6 @@ public class Solver {
 
         }
 
-        //getViablePiecePlacement would return null if no piece could cover (x, y)
         Set<String> possibleMoves = getViablePiecePlacements(initialNode.placement, challenge, point.x, point.y);
         //stop building the tree if there is no way to proceed
         if(possibleMoves == null){
@@ -85,7 +92,9 @@ public class Solver {
 
     }
 
-    /**
+    /**The author of this method is Boxuan Yang, with inspirations from:
+     * https://github.com/Aditya-B-Sharma/comp1110-assignment2-IQSteps/blob/master/src/comp1110/ass2/StepsGame.java?fbclid=IwAR0PN5OIKSRrhXatyN6khlMgzCTVw4_PaHbX4hxs3amdrB3QyUHBaJC_DrM
+     *
      * Given a tree which contains a solution, return that solution placemenr string.
      * We assume that the tree given already contains a solution.
      * @param tree a tree which contains a solution
@@ -104,7 +113,8 @@ public class Solver {
     }
 
     /**The author of this method is Boxuan Yang
-     * Given a placement, return an array list of points that this placement covers
+     *
+     * Given a placement, return an Arraylist of points that this placement covers
      * @param placement a well-formed placement
      * @return an array list of points (all the locations that the placement covers)
      */
@@ -142,6 +152,7 @@ public class Solver {
 
 
     /**The author of this method is Boxuan Yang
+     *
      * Given a placement string, return an ArrayList of all the locations not covered by it.
      * @param  placement String
      * @return an arraylist including only locations that are not covered)
@@ -193,11 +204,11 @@ public class Solver {
 
 
     /**The author of the method is Boxuan Yang
+     *
      * Given a solution string, order the placement sequence by piece IDs.
      * Ordering rules:
-     *   Order by piece ID.
-     *   If a piece exhibits rotational symmetry, only return the lowest orientation value (0 or 1).
-     * Use the task 3 placement and order it
+     *   1.Order by piece ID.
+     *   2.If a piece exhibits rotational symmetry, only return the lowest orientation value (0 or 1).
      */
     public static String orderSolution(String placement) {
         String[] ordered = new String[10];
@@ -224,6 +235,7 @@ public class Solver {
     }
 
     /**The author of this method is Boxuan Yang
+     *
      * Given a placement string, return a Point which is adjacent to the exsisting placement and is empty.
      * @param placement a placement string
      * @return a point
@@ -247,9 +259,10 @@ public class Solver {
     }
 
     /**The author of this method is Bouan Yang
-     * Given a placement string, return a Point which is adjacent to the exsisting placement and is empty.
+     *
+     * Given a placement string, return an ArrayList of type Point which is adjacent to the exsisting placement and is empty.
      * @param placement a placement string
-     * @return a point
+     * @return an ArrayList of Point
      */
     public static ArrayList<Point> getAdjacentEmptySquares(String placement){
         ArrayList<Point> adjacentEmptySquares = new ArrayList<>();
@@ -274,6 +287,7 @@ public class Solver {
 
 
     /**The author of this method is Boxuan Yang
+     *
      * Given a point and a placement string, return true if the point is adajacent to the placement
      * @param point an object of type Point
      * @param placement a placement string
