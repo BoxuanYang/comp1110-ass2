@@ -5,9 +5,10 @@ import org.junit.Test;
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import static comp1110.ass2.FocusGame.orderSolution;
+import static comp1110.ass2.Solver.*;
 import static comp1110.ass2.FocusGame.*;
 import static org.junit.Assert.*;
+import static comp1110.ass2.Solution.SOLUTIONS;
 
 public class FocusGameTest {
     @Test
@@ -57,8 +58,45 @@ public class FocusGameTest {
 
     @Test
     public void testGetAdjacentSquares(){
-        String s1 = "a630b103";
-        Point point = getAdjacentEmptySquare(s1);
-        System.out.println("" + point);
+        //*If the placement is complete, it should return null
+        for(Solution solution : SOLUTIONS){
+            String placement = solution.placement;
+            Point point = getAdjacentEmptySquare(placement);
+            assertTrue(point == null);
+        }
+
+        //*If the placement is "", return (4,2)
+        Point point = getAdjacentEmptySquare("");
+        assertTrue(point.equals(new Point(4, 2)));
+
+        //*Try other things
+        point = getAdjacentEmptySquare("c410d303e111f330g030h000i733j332");//a701b400c410
+        //System.out.println(getViablePiecePlacements("d303e111f330g030h000i733j332", "RWWRRRWWW", point.x, point.y));
+        //System.out.println(point);
+
+        ArrayList<Point> adjacentSquares = getAdjacentEmptySquares("f330");
+        int count = 0;
+        for(Point da : adjacentSquares){
+            System.out.println(da);
+            count ++;
+        }
+        System.out.println(count);
+        adjacentSquares = getAdjacentEmptySquares("a000b013c113d302e323f400g420h522i613j701");
+        assertTrue(adjacentSquares == null);
+    }
+
+    @Test
+    public void testGetAdjacentSquare(){
+        for(Solution solution : SOLUTIONS){
+            String placement = solution.placement;
+            Point point = getAdjacentEmptySquare(placement);
+            assertTrue(point == null);
+        }
+
+        Point point = getAdjacentEmptySquare("");
+        assertTrue(point.x == 4 && point.y == 2);
+
+        point = getAdjacentEmptySquare("a000");
+        System.out.println(point);
     }
 }
