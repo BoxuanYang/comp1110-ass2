@@ -78,7 +78,7 @@ public class Board extends Application {
     String challenge = startPlacement();
 
     // game solution to the challenge
-    private String gameSolution = gameSolution(challenge);
+    private String gameSolution = getSolution(challenge);
 
     // The definitions below correspond to the layout of the pieces when displayed in the game at their home state
     //the row location of each piece where index 0 is a, 1 is b, etc.
