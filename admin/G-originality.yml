@@ -32,7 +32,8 @@ declaration: >-
 # (or remove it altogether if you haven't used any external code)
 code:
   - comment: a lot of the methods in Board class was inspired by or taken from comp1110 assignment 1. The DraggablePiece class was partially copied from DraggableTile in the Game class of comp1110 assignment 1.
-    url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1
+             Also, we got some inspirations from a stackOverFlow question and a github program with the url specifed below.
+    url: https://gitlab.cecs.anu.edu.au/comp1110/comp1110-ass1, https://stackoverflow.com/questions/3522454/java-tree-data-structure, https://github.com/Aditya-B-Sharma/comp1110-assignment2-IQSteps/blob/master/src/comp1110/ass2/StepsGame.java?fbclid=IwAR0PN5OIKSRrhXatyN6khlMgzCTVw4_PaHbX4hxs3amdrB3QyUHBaJC_DrM
     licence: ..
 
 # Use this to list any assets (artwork, sound, etc) that you used.
