@@ -530,10 +530,10 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
 
     // game solution to the challenge
-//    private String gameSolution = getSolution(challenge);
+    private String gameSolution = getSolution(challenge);
 
     // gets an appropriate hint according to the pieces the user has already placed on the board
- /*   private String getHints() {
+    private String getHints() {
         String solution = gameSolution;
         int n = solution.length();
         for(int i=0; i<n; i=i+4) {
@@ -543,7 +543,14 @@ public class Board extends Application {
         }
         return null;
     }
-    */
+
+    private void displayHint(String piece) {
+
+     //   img = new Image(Board.class.getResource(URI_BASE + piece + ".png").toString());
+     //   setImage(img);
+
+    }
+
 
     /** The author of this method is Nicole Wang
      * Creates a hint button */

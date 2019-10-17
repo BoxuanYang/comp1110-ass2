@@ -610,51 +610,6 @@ public class FocusGame {
         return pieces;
     }
 
-    /**
-     * Given a string describing a placement of pieces and a string describing
-     * a challenge, return a set of all possible next viable piece placements
-     * which cover a specific board cell.
-     * <p>
-     * For a piece placement to be viable
-     * - it must be valid
-     * - it must be consistent with the challenge
-     *
-     * @param placement A viable placement string
-     * @param challenge The game's challenge is represented as a 9-character string
-     *                  which represents the color of the 3*3 central board area
-     *                  squares indexed as follows:
-     *                  [0] [1] [2]
-     *                  [3] [4] [5]
-     *                  [6] [7] [8]
-     *                  each character may be any of
-     *                  - 'R' = RED square
-     *                  - 'B' = Blue square
-     *                  - 'G' = Green square
-     *                  - 'W' = White square
-     * @param col       The cell's column.
-     * @param row       The cell's row.
-     * @return A set of viable piece placements, or null if there are none.
-     */
-    static Set<String> getViablePiecePlacementsOnCell(String placement, String challenge, int col, int row) {
-        // Set of strings that begin on the specified cell
-        Set<String> placements = getViablePiecePlacements(placement, challenge, col, row);
-        // update boardStates to include the challenge
-        // find strings for all possible locations that could include strings that cover the cell
-        for(int r=row; r>=0; r--) {
-            for(int c=col;c>=0;c--){
-                Set<String> add = getViablePiecePlacements(placement, challenge, col, row);
-                // add set of strings into cell
-                placements = Stream.of(placements, add).flatMap(Set::stream).collect(toSet());
-            }
-        }
-
-        // if no strings, return null
-        if (placements.isEmpty()){
-            return null;
-        }
-
-        return placements;
-    }
 
     /**The author of this method is Apoorva Sajja, Nicole Wang and Boxuan Yang
      * Return the canonical encoding of the solution to a particular challenge.
